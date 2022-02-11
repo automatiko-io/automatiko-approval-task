@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- origin at X=0.0 Y=0.0 -->
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:automatiko="https://automatiko.io" xmlns="https://automatiko.io" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://www.java.com/javaTypes" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd https://automatiko.io automatiko.xsd" id="Definition" exporter="org.eclipse.bpmn2.modeler.core" exporterVersion="2.0.0" expressionLanguage="http://www.mvel.org/2.0" targetNamespace="https://automatiko.io" typeLanguage="http://www.java.com/javaTypes">
+  <bpmn2:itemDefinition id="ItemDefinition_101" isCollection="false" structureRef="io.automatiko.tekton.task.run.Run"/>
+  <bpmn2:itemDefinition id="ItemDefinition_923" isCollection="false" structureRef="io.automatiko.tekton.task.approval.internal.ApprovalTaskResourceOperations"/>
+  <bpmn2:itemDefinition id="ItemDefinition_925" isCollection="false" structureRef="io.automatiko.engine.quarkus.operator.ops.CustomResourceOperations"/>
+  <bpmn2:itemDefinition id="ItemDefinition_1366" isCollection="false" structureRef="io.automatiko.tekton.task.approval.ApprovalTask"/>
+  <bpmn2:signal id="Signal_1" name="cancel"/>
+  <bpmn2:message id="Message_1" itemRef="ItemDefinition_101" name="createOrUpdate">
+    <bpmn2:extensionElements>
+      <automatiko:metaData name="filterExpression">
+        <automatiko:metaValue><![CDATA[hasApprovalTaskRef(eventData) && !hasResults(eventData)]]></automatiko:metaValue>
+      </automatiko:metaData>
+    </bpmn2:extensionElements>
+  </bpmn2:message>
+  <bpmn2:message id="Message_3" itemRef="ItemDefinition_101" name="deleted"/>
+  <bpmn2:message id="Message_4" itemRef="ItemDefinition_101" name="updated"/>
+  <bpmn2:interface id="Interface_1" implementationRef="io.automatiko.tekton.task.approval.internal.ApprovalTaskResourceOperations" name="ApprovalTaskOperations">
+    <bpmn2:operation id="Operation_1" name="createApprovalTask"/>
+    <bpmn2:operation id="Operation_3" name="onDelete"/>
+    <bpmn2:operation id="Operation_4" name="onUpdate"/>
+  </bpmn2:interface>
+  <bpmn2:interface id="Interface_2" implementationRef="io.automatiko.engine.quarkus.operator.ops.CustomResourceOperations" name="CustomResourceOperations">
+    <bpmn2:operation id="Operation_2" name="updateCustomResourceStatus"/>
+  </bpmn2:interface>
+  <bpmn2:process id="runs" automatiko:packageName="io.automatiko.tekton.task.run" name="RunController" isExecutable="true" processType="Public">
+    <bpmn2:documentation id="Documentation_1"><![CDATA[Controller for integration with Tekton Custom Tasks (represented as Run)]]></bpmn2:documentation>
+    <bpmn2:extensionElements>
+      <automatiko:import name="io.automatiko.tekton.task.run.Run"/>
+      <automatiko:import name="io.automatiko.tekton.task.approval.internal.ApprovalTaskResourceOperations"/>
+      <automatiko:import name="io.automatiko.engine.quarkus.operator.ops.CustomResourceOperations"/>
+      <automatiko:import name="io.automatiko.tekton.task.approval.ApprovalTask"/>
+      <automatiko:metaData name="tags">
+        <automatiko:metaValue><![CDATA[#{approvalTaskTag(resource)},#{pipelineTag(resource)}]]></automatiko:metaValue>
+      </automatiko:metaData>
+      <automatiko:metaData name="description">
+        <automatiko:metaValue><![CDATA[#{runInstanceDescription(resource)}]]></automatiko:metaValue>
+      </automatiko:metaData>
+    </bpmn2:extensionElements>
+    <bpmn2:startEvent id="StartEvent_1" name="StartProcess">
+      <bpmn2:extensionElements>
+        <automatiko:metaData name="elementname">
+          <automatiko:metaValue><![CDATA[StartProcess]]></automatiko:metaValue>
+        </automatiko:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>SequenceFlow_18</bpmn2:outgoing>
+      <bpmn2:dataOutput id="DataOutput_2" itemSubjectRef="ItemDefinition_101" name="event"/>
+      <bpmn2:dataOutputAssociation id="DataOutputAssociation_1">
+        <bpmn2:sourceRef>DataOutput_2</bpmn2:sourceRef>
+        <bpmn2:targetRef>resource</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+      <bpmn2:outputSet id="OutputSet_1" name="Output Set 1">
+        <bpmn2:dataOutputRefs>DataOutput_2</bpmn2:dataOutputRefs>
+      </bpmn2:outputSet>
+      <bpmn2:messageEventDefinition id="MessageEventDefinition_1" messageRef="Message_1"/>
+    </bpmn2:startEvent>
+    <bpmn2:dataObject id="resource" name="resource" itemSubjectRef="ItemDefinition_101"/>
+    <bpmn2:dataObject id="skipResourceUpdate" name="skipResourceUpdate" itemSubjectRef="../../../../mysql-operator/src/main/resources/mysql-schema-operator.bpmn2#ItemDefinition_3">
+      <bpmn2:extensionElements>
+        <automatiko:metaData name="tags">
+          <automatiko:metaValue><![CDATA[internal]]></automatiko:metaValue>
+        </automatiko:metaData>
+        <automatiko:metaData name="value">
+          <automatiko:metaValue><![CDATA[#{Boolean.TRUE}]]></automatiko:metaValue>
+        </automatiko:metaData>
+      </bpmn2:extensionElements>
+    </bpmn2:dataObject>
+    <bpmn2:endEvent id="EndEvent_1" name="done">
+      <bpmn2:extensionElements>
+        <automatiko:metaData name="elementname">
+          <automatiko:metaValue><![CDATA[done]]></automatiko:metaValue>
+        </automatiko:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:serviceTask id="ServiceTask_1" name="Create Approval Task CR" implementation="Java" operationRef="Operation_1">
+      <bpmn2:extensionElements>
+        <automatiko:metaData name="elementname">
+          <automatiko:metaValue><![CDATA[Create Approval Task CR]]></automatiko:metaValue>
+        </automatiko:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>SequenceFlow_18</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="InputOutputSpecification_3">
+        <bpmn2:dataInput id="DataInput_1" itemSubjectRef="ItemDefinition_101" name="runResource"/>
+        <bpmn2:dataOutput id="DataOutput_1" itemSubjectRef="../../../../mysql-operator/src/main/resources/mysql-schema-operator.bpmn2#ItemDefinition_3" name="skipResourceUpdate"/>
+        <bpmn2:inputSet id="InputSet_3" name="Input Set 3">
+          <bpmn2:dataInputRefs>DataInput_1</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="OutputSet_5" name="Output Set 5">
+          <bpmn2:dataOutputRefs>DataOutput_1</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation id="DataInputAssociation_1">
+        <bpmn2:sourceRef>resource</bpmn2:sourceRef>
+        <bpmn2:targetRef>DataInput_1</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation id="DataOutputAssociation_2">
+        <bpmn2:sourceRef>DataOutput_1</bpmn2:sourceRef>
+        <bpmn2:targetRef>skipResourceUpdate</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:subProcess id="SubProcess_1" name="Event Handler" triggeredByEvent="true">
+      <bpmn2:extensionElements>
+        <automatiko:metaData name="elementname">
+          <automatiko:metaValue><![CDATA[Event Handler]]></automatiko:metaValue>
+        </automatiko:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:startEvent id="StartEvent_2" name="on delete">
+        <bpmn2:extensionElements>
+          <automatiko:metaData name="elementname">
+            <automatiko:metaValue><![CDATA[on delete]]></automatiko:metaValue>
+          </automatiko:metaData>
+        </bpmn2:extensionElements>
+        <bpmn2:outgoing>SequenceFlow_6</bpmn2:outgoing>
+        <bpmn2:dataOutput id="DataOutput_5" itemSubjectRef="ItemDefinition_101" name="Message_3_Output"/>
+        <bpmn2:dataOutputAssociation id="DataOutputAssociation_4">
+          <bpmn2:sourceRef>DataOutput_5</bpmn2:sourceRef>
+          <bpmn2:targetRef>resource</bpmn2:targetRef>
+        </bpmn2:dataOutputAssociation>
+        <bpmn2:outputSet id="OutputSet_10" name="Output Set 10">
+          <bpmn2:dataOutputRefs>DataOutput_5</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+        <bpmn2:messageEventDefinition id="MessageEventDefinition_3" messageRef="Message_3"/>
+      </bpmn2:startEvent>
+      <bpmn2:endEvent id="EndEvent_2" name="deleted">
+        <bpmn2:extensionElements>
+          <automatiko:metaData name="elementname">
+            <automatiko:metaValue><![CDATA[deleted]]></automatiko:metaValue>
+          </automatiko:metaData>
+        </bpmn2:extensionElements>
+        <bpmn2:incoming>SequenceFlow_11</bpmn2:incoming>
+      </bpmn2:endEvent>
+      <bpmn2:sequenceFlow id="SequenceFlow_11" automatiko:priority="1" sourceRef="ServiceTask_3" targetRef="EndEvent_2"/>
+      <bpmn2:serviceTask id="ServiceTask_3" name="Delete Approval task" implementation="Java" operationRef="Operation_3">
+        <bpmn2:extensionElements>
+          <automatiko:metaData name="elementname">
+            <automatiko:metaValue><![CDATA[Delete Approval task]]></automatiko:metaValue>
+          </automatiko:metaData>
+        </bpmn2:extensionElements>
+        <bpmn2:incoming>SequenceFlow_6</bpmn2:incoming>
+        <bpmn2:outgoing>SequenceFlow_11</bpmn2:outgoing>
+        <bpmn2:ioSpecification id="InputOutputSpecification_13">
+          <bpmn2:dataInput id="DataInput_6" itemSubjectRef="ItemDefinition_101" name="resource"/>
+          <bpmn2:inputSet id="InputSet_12" name="Input Set 12">
+            <bpmn2:dataInputRefs>DataInput_6</bpmn2:dataInputRefs>
+          </bpmn2:inputSet>
+          <bpmn2:outputSet id="OutputSet_18" name="Output Set 18"/>
+        </bpmn2:ioSpecification>
+        <bpmn2:dataInputAssociation id="DataInputAssociation_6">
+          <bpmn2:sourceRef>resource</bpmn2:sourceRef>
+          <bpmn2:targetRef>DataInput_6</bpmn2:targetRef>
+        </bpmn2:dataInputAssociation>
+      </bpmn2:serviceTask>
+      <bpmn2:sequenceFlow id="SequenceFlow_6" automatiko:priority="1" sourceRef="StartEvent_2" targetRef="ServiceTask_3"/>
+    </bpmn2:subProcess>
+    <bpmn2:subProcess id="SubProcess_2" name="Event Handler" triggeredByEvent="true">
+      <bpmn2:extensionElements>
+        <automatiko:metaData name="elementname">
+          <automatiko:metaValue><![CDATA[Event Handler]]></automatiko:metaValue>
+        </automatiko:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:startEvent id="StartEvent_3" name="on update" isInterrupting="false">
+        <bpmn2:extensionElements>
+          <automatiko:metaData name="elementname">
+            <automatiko:metaValue><![CDATA[on update]]></automatiko:metaValue>
+          </automatiko:metaData>
+        </bpmn2:extensionElements>
+        <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>
+        <bpmn2:dataOutput id="DataOutput_6" itemSubjectRef="ItemDefinition_101" name="Message_4_Output"/>
+        <bpmn2:dataOutputAssociation id="DataOutputAssociation_5">
+          <bpmn2:sourceRef>DataOutput_6</bpmn2:sourceRef>
+          <bpmn2:targetRef>resource</bpmn2:targetRef>
+        </bpmn2:dataOutputAssociation>
+        <bpmn2:outputSet id="OutputSet_11" name="Output Set 11">
+          <bpmn2:dataOutputRefs>DataOutput_6</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+        <bpmn2:messageEventDefinition id="MessageEventDefinition_4" messageRef="Message_4"/>
+      </bpmn2:startEvent>
+      <bpmn2:endEvent id="EndEvent_3" name="updated">
+        <bpmn2:extensionElements>
+          <automatiko:metaData name="elementname">
+            <automatiko:metaValue><![CDATA[updated]]></automatiko:metaValue>
+          </automatiko:metaData>
+        </bpmn2:extensionElements>
+        <bpmn2:incoming>SequenceFlow_5</bpmn2:incoming>
+      </bpmn2:endEvent>
+      <bpmn2:serviceTask id="ServiceTask_2" name="cancel if needed" implementation="Java" operationRef="Operation_4">
+        <bpmn2:extensionElements>
+          <automatiko:metaData name="elementname">
+            <automatiko:metaValue><![CDATA[cancel if needed]]></automatiko:metaValue>
+          </automatiko:metaData>
+        </bpmn2:extensionElements>
+        <bpmn2:incoming>SequenceFlow_3</bpmn2:incoming>
+        <bpmn2:outgoing>SequenceFlow_5</bpmn2:outgoing>
+        <bpmn2:ioSpecification id="InputOutputSpecification_5">
+          <bpmn2:dataInput id="DataInput_2" itemSubjectRef="ItemDefinition_101" name="resource"/>
+          <bpmn2:dataOutput id="DataOutput_4" itemSubjectRef="../../../../mysql-operator/src/main/resources/mysql-schema-operator.bpmn2#ItemDefinition_3" name="skipResourceUpdate"/>
+          <bpmn2:inputSet id="InputSet_5" name="Input Set 5">
+            <bpmn2:dataInputRefs>DataInput_2</bpmn2:dataInputRefs>
+          </bpmn2:inputSet>
+          <bpmn2:outputSet id="OutputSet_7" name="Output Set 7">
+            <bpmn2:dataOutputRefs>DataOutput_4</bpmn2:dataOutputRefs>
+          </bpmn2:outputSet>
+        </bpmn2:ioSpecification>
+        <bpmn2:dataInputAssociation id="DataInputAssociation_2">
+          <bpmn2:sourceRef>resource</bpmn2:sourceRef>
+          <bpmn2:targetRef>DataInput_2</bpmn2:targetRef>
+        </bpmn2:dataInputAssociation>
+        <bpmn2:dataOutputAssociation id="DataOutputAssociation_6">
+          <bpmn2:sourceRef>DataOutput_4</bpmn2:sourceRef>
+          <bpmn2:targetRef>skipResourceUpdate</bpmn2:targetRef>
+        </bpmn2:dataOutputAssociation>
+      </bpmn2:serviceTask>
+      <bpmn2:sequenceFlow id="SequenceFlow_3" automatiko:priority="1" sourceRef="StartEvent_3" targetRef="ServiceTask_2"/>
+      <bpmn2:sequenceFlow id="SequenceFlow_5" automatiko:priority="1" sourceRef="ServiceTask_2" targetRef="EndEvent_3"/>
+    </bpmn2:subProcess>
+    <bpmn2:sequenceFlow id="SequenceFlow_18" automatiko:priority="1" sourceRef="StartEvent_1" targetRef="ServiceTask_1"/>
+    <bpmn2:intermediateCatchEvent id="IntermediateCatchEvent_1" name="manual cancel">
+      <bpmn2:extensionElements>
+        <automatiko:metaData name="elementname">
+          <automatiko:metaValue><![CDATA[manual cancel]]></automatiko:metaValue>
+        </automatiko:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
+      <bpmn2:dataOutput id="DataOutput_3" name="Signal_1_Output"/>
+      <bpmn2:dataOutputAssociation id="DataOutputAssociation_3">
+        <bpmn2:sourceRef>DataOutput_3</bpmn2:sourceRef>
+      </bpmn2:dataOutputAssociation>
+      <bpmn2:outputSet id="OutputSet_2" name="Output Set 2">
+        <bpmn2:dataOutputRefs>DataOutput_3</bpmn2:dataOutputRefs>
+      </bpmn2:outputSet>
+      <bpmn2:signalEventDefinition id="SignalEventDefinition_1" signalRef="Signal_1"/>
+    </bpmn2:intermediateCatchEvent>
+    <bpmn2:sequenceFlow id="SequenceFlow_1" automatiko:priority="1" sourceRef="ServiceTask_1" targetRef="IntermediateCatchEvent_1"/>
+    <bpmn2:sequenceFlow id="SequenceFlow_2" automatiko:priority="1" sourceRef="IntermediateCatchEvent_1" targetRef="EndEvent_1"/>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_Process_1" bpmnElement="runs">
+      <bpmndi:BPMNShape id="BPMNShape_SubProcess_1" bpmnElement="SubProcess_1" isExpanded="true">
+        <dc:Bounds height="150.0" width="434.0" x="20.0" y="350.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_1">
+          <dc:Bounds height="11.0" width="58.0" x="26.0" y="353.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_SubProcess_2" bpmnElement="SubProcess_2" isExpanded="true">
+        <dc:Bounds height="150.0" width="328.0" x="510.0" y="350.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_2">
+          <dc:Bounds height="11.0" width="58.0" x="516.0" y="353.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds height="36.0" width="36.0" x="69.0" y="131.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_3">
+          <dc:Bounds height="11.0" width="52.0" x="61.0" y="167.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_DataObject_1" bpmnElement="resource">
+        <dc:Bounds height="50.0" width="36.0" x="270.0" y="240.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_4">
+          <dc:Bounds height="11.0" width="36.0" x="270.0" y="290.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_DataObject_2" bpmnElement="skipResourceUpdate">
+        <dc:Bounds height="50.0" width="36.0" x="360.0" y="240.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_5">
+          <dc:Bounds height="22.0" width="62.0" x="347.0" y="290.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_EndEvent_1" bpmnElement="EndEvent_1">
+        <dc:Bounds height="36.0" width="36.0" x="475.0" y="123.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_6">
+          <dc:Bounds height="11.0" width="21.0" x="482.0" y="159.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_ServiceTask_1" bpmnElement="ServiceTask_1" isExpanded="true">
+        <dc:Bounds height="50.0" width="110.0" x="190.0" y="123.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_7">
+          <dc:Bounds height="11.0" width="101.0" x="194.0" y="142.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_StartEvent_2" bpmnElement="StartEvent_2">
+        <dc:Bounds height="36.0" width="36.0" x="44.0" y="402.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_9">
+          <dc:Bounds height="11.0" width="38.0" x="43.0" y="438.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_StartEvent_3" bpmnElement="StartEvent_3">
+        <dc:Bounds height="36.0" width="36.0" x="532.0" y="392.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_10">
+          <dc:Bounds height="11.0" width="41.0" x="530.0" y="428.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_EndEvent_2" bpmnElement="EndEvent_2">
+        <dc:Bounds height="36.0" width="36.0" x="366.0" y="402.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_12">
+          <dc:Bounds height="11.0" width="30.0" x="369.0" y="438.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_EndEvent_3" bpmnElement="EndEvent_3">
+        <dc:Bounds height="36.0" width="36.0" x="760.0" y="392.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_14">
+          <dc:Bounds height="11.0" width="33.0" x="761.0" y="428.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_ServiceTask_3" bpmnElement="ServiceTask_3" isExpanded="true">
+        <dc:Bounds height="50.0" width="110.0" x="170.0" y="395.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_16">
+          <dc:Bounds height="11.0" width="83.0" x="183.0" y="414.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_IntermediateCatchEvent_1" bpmnElement="IntermediateCatchEvent_1">
+        <dc:Bounds height="36.0" width="36.0" x="373.0" y="123.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_8">
+          <dc:Bounds height="11.0" width="59.0" x="362.0" y="159.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_ServiceTask_2" bpmnElement="ServiceTask_2" isExpanded="true">
+        <dc:Bounds height="50.0" width="110.0" x="610.0" y="385.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_11">
+          <dc:Bounds height="11.0" width="66.0" x="632.0" y="404.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_DataOutputAssociation_1" bpmnElement="DataOutputAssociation_1" sourceElement="BPMNShape_StartEvent_1" targetElement="BPMNShape_DataObject_1">
+        <di:waypoint xsi:type="dc:Point" x="87.0" y="167.0"/>
+        <di:waypoint xsi:type="dc:Point" x="87.0" y="256.0"/>
+        <di:waypoint xsi:type="dc:Point" x="270.0" y="256.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_17"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_DataInputAssociation_1" bpmnElement="DataInputAssociation_1" sourceElement="BPMNShape_DataObject_1" targetElement="BPMNShape_ServiceTask_1">
+        <di:waypoint xsi:type="dc:Point" x="270.0" y="240.0"/>
+        <di:waypoint xsi:type="dc:Point" x="270.0" y="173.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_18"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_DataOutputAssociation_3" bpmnElement="DataOutputAssociation_4" sourceElement="BPMNShape_StartEvent_2" targetElement="BPMNShape_DataObject_1">
+        <di:waypoint xsi:type="dc:Point" x="62.0" y="402.0"/>
+        <di:waypoint xsi:type="dc:Point" x="62.0" y="273.0"/>
+        <di:waypoint xsi:type="dc:Point" x="270.0" y="273.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_21"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_DataOutputAssociation_4" bpmnElement="DataOutputAssociation_5" sourceElement="BPMNShape_StartEvent_3" targetElement="BPMNShape_DataObject_1">
+        <di:waypoint xsi:type="dc:Point" x="550.0" y="392.0"/>
+        <di:waypoint xsi:type="dc:Point" x="550.0" y="341.0"/>
+        <di:waypoint xsi:type="dc:Point" x="288.0" y="341.0"/>
+        <di:waypoint xsi:type="dc:Point" x="288.0" y="290.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_22"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_11" bpmnElement="SequenceFlow_11" sourceElement="BPMNShape_ServiceTask_3" targetElement="BPMNShape_EndEvent_2">
+        <di:waypoint xsi:type="dc:Point" x="280.0" y="420.0"/>
+        <di:waypoint xsi:type="dc:Point" x="323.0" y="420.0"/>
+        <di:waypoint xsi:type="dc:Point" x="366.0" y="420.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_24"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_DataInputAssociation_3" bpmnElement="DataInputAssociation_6" sourceElement="BPMNShape_DataObject_1" targetElement="BPMNShape_ServiceTask_3">
+        <di:waypoint xsi:type="dc:Point" x="279.0" y="290.0"/>
+        <di:waypoint xsi:type="dc:Point" x="279.0" y="342.0"/>
+        <di:waypoint xsi:type="dc:Point" x="225.0" y="342.0"/>
+        <di:waypoint xsi:type="dc:Point" x="225.0" y="395.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_29"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_18" bpmnElement="SequenceFlow_18" sourceElement="BPMNShape_StartEvent_1" targetElement="BPMNShape_ServiceTask_1">
+        <di:waypoint xsi:type="dc:Point" x="105.0" y="149.0"/>
+        <di:waypoint xsi:type="dc:Point" x="147.0" y="148.0"/>
+        <di:waypoint xsi:type="dc:Point" x="190.0" y="148.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_30"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_DataOutputAssociation_2" bpmnElement="DataOutputAssociation_2" sourceElement="BPMNShape_ServiceTask_1" targetElement="BPMNShape_DataObject_2">
+        <di:waypoint xsi:type="dc:Point" x="300.0" y="156.0"/>
+        <di:waypoint xsi:type="dc:Point" x="330.0" y="156.0"/>
+        <di:waypoint xsi:type="dc:Point" x="330.0" y="265.0"/>
+        <di:waypoint xsi:type="dc:Point" x="360.0" y="265.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_13"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_1" bpmnElement="SequenceFlow_1" sourceElement="BPMNShape_ServiceTask_1" targetElement="BPMNShape_IntermediateCatchEvent_1">
+        <di:waypoint xsi:type="dc:Point" x="300.0" y="139.0"/>
+        <di:waypoint xsi:type="dc:Point" x="336.0" y="139.0"/>
+        <di:waypoint xsi:type="dc:Point" x="336.0" y="141.0"/>
+        <di:waypoint xsi:type="dc:Point" x="373.0" y="141.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_15"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_2" bpmnElement="SequenceFlow_2" sourceElement="BPMNShape_IntermediateCatchEvent_1" targetElement="BPMNShape_EndEvent_1">
+        <di:waypoint xsi:type="dc:Point" x="409.0" y="141.0"/>
+        <di:waypoint xsi:type="dc:Point" x="442.0" y="141.0"/>
+        <di:waypoint xsi:type="dc:Point" x="475.0" y="141.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_19"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_3" bpmnElement="SequenceFlow_3" sourceElement="BPMNShape_StartEvent_3" targetElement="BPMNShape_ServiceTask_2">
+        <di:waypoint xsi:type="dc:Point" x="568.0" y="410.0"/>
+        <di:waypoint xsi:type="dc:Point" x="589.0" y="410.0"/>
+        <di:waypoint xsi:type="dc:Point" x="610.0" y="410.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_20"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_5" bpmnElement="SequenceFlow_5" sourceElement="BPMNShape_ServiceTask_2" targetElement="BPMNShape_EndEvent_3">
+        <di:waypoint xsi:type="dc:Point" x="720.0" y="410.0"/>
+        <di:waypoint xsi:type="dc:Point" x="740.0" y="410.0"/>
+        <di:waypoint xsi:type="dc:Point" x="760.0" y="410.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_23"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_DataInputAssociation_2" bpmnElement="DataInputAssociation_2" sourceElement="BPMNShape_DataObject_1" targetElement="BPMNShape_ServiceTask_2">
+        <di:waypoint xsi:type="dc:Point" x="297.0" y="290.0"/>
+        <di:waypoint xsi:type="dc:Point" x="297.0" y="337.0"/>
+        <di:waypoint xsi:type="dc:Point" x="665.0" y="337.0"/>
+        <di:waypoint xsi:type="dc:Point" x="665.0" y="385.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_25"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_DataOutputAssociation_5" bpmnElement="DataOutputAssociation_6" sourceElement="BPMNShape_ServiceTask_2" targetElement="BPMNShape_DataObject_2">
+        <di:waypoint xsi:type="dc:Point" x="683.0" y="385.0"/>
+        <di:waypoint xsi:type="dc:Point" x="683.0" y="265.0"/>
+        <di:waypoint xsi:type="dc:Point" x="396.0" y="265.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_26"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_6" bpmnElement="SequenceFlow_6" sourceElement="BPMNShape_StartEvent_2" targetElement="BPMNShape_ServiceTask_3">
+        <di:waypoint xsi:type="dc:Point" x="80.0" y="420.0"/>
+        <di:waypoint xsi:type="dc:Point" x="125.0" y="420.0"/>
+        <di:waypoint xsi:type="dc:Point" x="170.0" y="420.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_27"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

@@ -1,0 +1,22 @@
+target/
+/local
+
+**/.idea
+
+# Eclipse, Netbeans and IntelliJ files
+!.gitignore
+!.github
+/nbproject
+/*.ipr
+/*.iws
+*.iml
+.settings/
+.project
+.classpath
+.factorypath
+.DS_Store
+
+docs/build/
+build/
+docs/antora-ui-default/node_modules
+docs/antora-ui-default/public

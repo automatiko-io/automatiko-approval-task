@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Approval Task</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--===============================================================================================-->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="/js/jquery.serializejson.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+<!--===============================================================================================-->
+</head>
+<body>
+
+
+	<div class="container-contact100">
+		<div class="wrap-contact100">
+			<form id="content" class="contact100-form validate-form">
+				<span class="contact100-form-title">
+					Approval task
+				</span>
+
+				<div class="wrap-input100 validate-input bg1">
+					<h4>
+						{inputs.spec.description.raw}
+					</h4>
+				</div>
+
+				<div class="wrap-input100 validate-input bg0 rs1-alert-validate">
+					<span class="label-input100">Comment</span>
+					<textarea id="comment" class="input100" name="message" placeholder="Add your comment here..."></textarea>
+				</div>
+
+				<div class="container-contact100-form-btn">
+					<button id="approveButton" class="contact100-form-btn approve">
+						<span>
+							Approve
+						</span>
+					</button>
+
+					<button id="rejectButton" class="contact100-form-btn reject">
+						<span>
+							Reject
+						</span>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+<script type="text/javascript">
+	let taskActionUrl = "{url}";
+	
+	let completeTask = function(approved, comment) {
+
+		$.ajax({
+			url : taskActionUrl,
+			type : 'POST',
+			dataType : 'json',
+			contentType: 'application/json',
+			data: JSON.stringify({'approval': approved, 'comment': comment}),
+			crossDomain : true,
+			success : function(data) {	
+				if (approved) {
+					$( "#content" ).parent()
+				    .append(
+				      $('<div  style="text-align: center;"> '+
+				  		'	<span class="fa fa-check" style="font-size:60px;"></span> '+
+						'	<br/><br/><br/><br/> '+
+						'	<h3 style="text-align: center;">Pipeline "{inputs.spec.pipeline}" has been approved</h3> '+
+						'	</div>')
+				    );
+				} else {
+					$( "#content" ).parent()
+				    .append(
+				      $('<div  style="text-align: center;"> '+
+						  		'	<span class="fa fa-ban" style="font-size:60px;"></span> '+
+								'	<br/><br/><br/><br/> '+
+								'	<h3 style="text-align: center;">Pipeline "{inputs.spec.pipeline}" has been rejected</h3> '+
+								'	</div>')
+				    );
+				}
+				$( "#content" ).remove();
+
+			},
+			error : function(req, status, error) {
+				console.error("Task complete failed with " + status + ", error: " + error);
+			}
+		});
+
+	}
+	
+	$(document).ready(function() {
+		$('#content').submit(false);
+		
+		$( "#approveButton" ).on( "click", function() {
+			completeTask(true, $( "#comment" ).val());			
+			  
+		});
+
+		$( "#rejectButton" ).on( "click", function() {
+			completeTask(false, $( "#comment" ).val());			
+			  
+		});
+
+	});
+	</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Approval tasks</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--===============================================================================================-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+
+
+	<div id="rform" class="container-contact100">
+		<div class="wrap-contact100">
+			<span class="contact100-form-title"> Find approval tasks </span>
+			<form id="sform" class="contact100-form validate-form">
+				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100">
+					<span class="label-input100">Pipeline run name *</span> <input id="pipeline"
+						class="input100" type="text" name="name"
+						placeholder="Enter pipeline run name">
+				</div>
+
+				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100">
+					<span class="label-input100">Approver *</span> <input id="approver"
+						class="input100" type="text" name="email"
+						placeholder="Enter approver">
+				</div>
+				<div class="contact100-form-single-btn">
+					<button id="submitButton" class="contact100-form-btn">
+						<span> Submit </span>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="results" class="container-contact100 hidden">
+		<div  id="results" class="wrap-contact100">
+		<span class="contact100-form-title"> Approval tasks </span>
+		<table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col" class="col-8">Task</th>
+		    </tr>
+		  </thead>
+		  <tbody id="taskTBody">
+
+		  </tbody>
+		</table>
+		</div>
+	</div>
+	<script>
+	let loadTasks = function() {
+		
+		$.ajax({
+			url : '/approvals/' + $( "#pipeline" ).val() + '-approval/tasks?user=' + $( "#approver" ).val(),
+			type : 'GET',
+			dataType : 'json',
+			contentType: 'application/json',
+			crossDomain : true,
+			success : function(data) {	
+				data.forEach(function(item, index) {
+					$( "#taskTBody" )
+				    .append(
+				      $('<tr>' +
+		      			'<th scope="row">' + index + '</th>' +
+		      			'<td><a href="' + item.formLink +'?user=' + $( "#approver" ).val() + '" target="_blank" title="Click to go to approval task form">' + item.name +'</a></td>' +
+		    			'</tr>')
+				    );
+				});
+
+			},
+			error : function(req, status, error) {
+				console.error("Unable to load tasks " + status + ", error: " + error);
+			}
+		});
+
+	}
+	
+	$(document).ready(function() {
+		$('#sform').submit(false);
+		if (window.location.href.includes('#')) {
+			$( "#pipeline" ).val(window.location.href.split('#')[1]);
+		}
+		$( "#submitButton" ).on( "click", function() {
+			if ($( "#pipeline" ).val() === '') {
+				alert("Please enter pipeline run name");
+				return;
+			}
+			
+			loadTasks();			
+			$("#rform").addClass("hidden");
+			$("#results").removeClass("hidden");
+		});
+
+	});
+	</script>
+</body>
+</html>
