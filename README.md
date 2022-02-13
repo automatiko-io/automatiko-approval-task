@@ -5,6 +5,9 @@ of the pipeline run and wait for approval by human actors. It is an implementati
 
 ## Features
 
+See [Roadmap](Roadmap.md) for already defined features to be added. Feel free to ask for additional ones either by creating an issue or adding to the roadmap.
+
+
 Approval Task allows to use approvals as part of you pipeline definition. Let's look quickly at very simple example pipeline
 
 ````
