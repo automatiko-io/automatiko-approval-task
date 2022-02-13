@@ -1,0 +1,25 @@
+# Road map
+
+## Documentation
+
+- [ ] document file system based persistence
+- [ ] document extesability via modified workflows
+- [ ] document extensability via added custom workflows
+- [ ] document deployment to OpenShift based tekton installations
+
+## Security
+
+- [ ] implement OIDC / OAuth based security for approval tasks
+
+## Features
+
+- [ ] add support for timeouts
+- [ ] add support for cancelation
+- [ ] add additional strategies
+- [ ] add mongo db based persistence
+- [ ] additional notification channels (teams, slack, etc)
+- [ ] websocket based endpoint to display new tasks/clean completed tasks automatically
+
+## Testability
+
+- [ ] build test automation for approval tasks to test based on latest version of tekton
