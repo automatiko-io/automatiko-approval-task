@@ -31,4 +31,9 @@ public class Ref {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Ref [apiVersion=" + apiVersion + ", kind=" + kind + ", name=" + name + "]";
+    }
 }

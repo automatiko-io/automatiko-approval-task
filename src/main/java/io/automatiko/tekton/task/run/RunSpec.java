@@ -16,6 +16,10 @@ public class RunSpec implements KubernetesResource {
     private static final long serialVersionUID = -1775061327392758141L;
     private List<Map<String, Object>> params;
 
+    private String timeout;
+
+    private String status;
+
     private Ref ref;
 
     public Ref getRef() {
@@ -34,6 +38,22 @@ public class RunSpec implements KubernetesResource {
         this.params = params;
     }
 
+    public String getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(String timeout) {
+        this.timeout = timeout;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Object findParam(String name, Object defaultValue) {
 
         if (params == null) {
@@ -43,5 +63,10 @@ public class RunSpec implements KubernetesResource {
         return params.stream().filter(param -> param.getOrDefault("name", "").equals(name)).map(param -> param.get("value"))
                 .findFirst()
                 .orElse(defaultValue);
+    }
+
+    @Override
+    public String toString() {
+        return "RunSpec [params=" + params + ", timeout=" + timeout + ", status=" + status + ", ref=" + ref + "]";
     }
 }

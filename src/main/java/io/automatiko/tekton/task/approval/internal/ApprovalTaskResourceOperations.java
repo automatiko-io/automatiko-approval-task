@@ -17,11 +17,11 @@ import org.slf4j.LoggerFactory;
 import io.automatiko.tekton.task.approval.ApprovalResults;
 import io.automatiko.tekton.task.approval.ApprovalSpec;
 import io.automatiko.tekton.task.approval.ApprovalSpec.Strategy;
+import io.automatiko.tekton.task.approval.ApprovalStatus;
+import io.automatiko.tekton.task.approval.ApprovalTask;
 import io.automatiko.tekton.task.run.Run;
 import io.automatiko.tekton.task.run.RunSpec;
 import io.automatiko.tekton.task.run.RunStatus;
-import io.automatiko.tekton.task.approval.ApprovalStatus;
-import io.automatiko.tekton.task.approval.ApprovalTask;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.Resource;
 
@@ -80,25 +80,32 @@ public class ApprovalTaskResourceOperations {
         return true;
     }
 
-    @SuppressWarnings("rawtypes")
-    public boolean onUpdate(Run runResource) {
-        String currentStatus = "";
-        List<Map<String, Object>> conditions = runResource.getStatus().getConditions();
-        if (conditions == null || conditions.isEmpty()) {
-            currentStatus = "not set";
-        } else {
+    public boolean onUpdate(Run runResource, boolean skipResourceUpdate) {
 
-            for (Object condition : conditions) {
-                if (condition instanceof Map) {
-                    Object statusSet = ((Map) condition).get("status");
-                    if (statusSet != null) {
-                        currentStatus = statusSet.toString();
-                    }
-                }
-            }
+        String currentStatus = runResource.getSpec().getStatus();
+        if (currentStatus == null) {
+            currentStatus = "not set";
         }
 
-        if ("cancelled".equalsIgnoreCase(currentStatus)) {
+        if ("RunCancelled".equalsIgnoreCase(currentStatus)) {
+            RunStatus status = runResource.getStatus();
+            List<Map<String, Object>> conditions = status.getConditions();
+
+            if (conditions == null) {
+                conditions = new ArrayList<>();
+                status.setConditions(conditions);
+            } else {
+                conditions.clear();
+            }
+
+            Map<String, Object> initial = new HashMap<>();
+            initial.put("status", "False");
+            initial.put("reason", "RunTimedOut");
+            initial.put("message", "Approval task has timed out");
+            initial.put("type", "Succeeded");
+            initial.put("lastTransitionTime",
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")));
+            conditions.add(initial);
 
             Resource<ApprovalTask> r = kube.resources(ApprovalTask.class).inNamespace(runResource.getMetadata().getNamespace())
                     .withName(runResource.getMetadata().getName());
@@ -113,7 +120,51 @@ public class ApprovalTaskResourceOperations {
             }
         }
         // return true to indicate no update is needed
-        return true;
+        return skipResourceUpdate;
+    }
+
+    public void onTimeout(Run runResource) {
+
+        Resource<ApprovalTask> r = kube.resources(ApprovalTask.class).inNamespace(runResource.getMetadata().getNamespace())
+                .withName(runResource.getMetadata().getName());
+
+        ApprovalTask fromServer = r.fromServer().get();
+        // only delete it when there where no decision taken
+        if (fromServer != null && fromServer.getStatus().getResults() == null) {
+
+            r.delete();
+
+            LOGGER.info("Approval task has been deleted {}", runResource.getStatus());
+
+            Resource<Run> rr = kube.resources(Run.class).inNamespace(runResource.getMetadata().getNamespace())
+                    .withName(runResource.getMetadata().getName());
+
+            Run instance = rr.fromServer().get();
+            if (instance != null) {
+
+                RunStatus status = instance.getStatus();
+                List<Map<String, Object>> conditions = status.getConditions();
+
+                if (conditions == null) {
+                    conditions = new ArrayList<>();
+                    status.setConditions(conditions);
+                } else {
+                    conditions.clear();
+                }
+
+                Map<String, Object> initial = new HashMap<>();
+                initial.put("status", "False");
+                initial.put("reason", "RunTimedOut");
+                initial.put("message", "Approval task has timed out");
+                initial.put("type", "Succeeded");
+                initial.put("lastTransitionTime",
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")));
+                conditions.add(initial);
+
+                rr.patchStatus(instance);
+                runResource.setStatus(status);
+            }
+        }
     }
 
     public void onDelete(Run runResource) {
@@ -176,7 +227,6 @@ public class ApprovalTaskResourceOperations {
 
         Resource<ApprovalTask> r = kube.resources(ApprovalTask.class).inNamespace(resource.getMetadata().getNamespace())
                 .withName(resource.getMetadata().getName());
-
         ApprovalTask task = r.fromServer().get();
 
         task.setStatus(resource.getStatus());
@@ -184,17 +234,19 @@ public class ApprovalTaskResourceOperations {
         r.patchStatus(task);
 
         r.edit(ed -> {
+
             if (ed.getMetadata().getLabels() == null) {
                 ed.getMetadata().setLabels(new HashMap<>());
             }
             ed.getMetadata().getLabels().put("decision", approved == true ? "approved" : "rejected");
-
+            resource.getMetadata().setLabels(ed.getMetadata().getLabels());
+            resource.setStatus(status);
             return ed;
         });
 
     }
 
-    public void updateRunStatusCompleted(ApprovalTask resource) {
+    public void updateRunResultsCompleted(ApprovalTask resource) {
 
         Resource<Run> r = kube.resources(Run.class).inNamespace(resource.getMetadata().getNamespace())
                 .withName(resource.getMetadata().getName().replace("approval-", ""));
@@ -202,24 +254,6 @@ public class ApprovalTaskResourceOperations {
         Run instance = r.fromServer().get();
         if (instance != null) {
             RunStatus status = instance.getStatus() == null ? new RunStatus() : instance.getStatus();
-
-            List<Map<String, Object>> conditions = status.getConditions();
-
-            if (conditions == null) {
-                conditions = new ArrayList<>();
-                status.setConditions(conditions);
-            } else {
-                conditions.clear();
-            }
-
-            Map<String, Object> initial = new HashMap<>();
-            initial.put("status", "True");
-            initial.put("reason", "Succeeded");
-            initial.put("message", "Approval Task has been completed");
-            initial.put("type", "Succeeded");
-            initial.put("lastTransitionTime",
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")));
-            conditions.add(initial);
 
             List<Map<String, Object>> results = new ArrayList<>();
             Map<String, Object> decision = new HashMap<>();
@@ -257,7 +291,7 @@ public class ApprovalTaskResourceOperations {
                 }
                 ed.getMetadata().getLabels().put("responses", current + "_of_"
                         + (resource.getSpec().getApprovers().size() == 0 ? 1 : resource.getSpec().getApprovers().size()));
-                System.out.println("Returning updated resource...");
+
                 return ed;
             });
         }
@@ -311,4 +345,34 @@ public class ApprovalTaskResourceOperations {
         resource.setStatus(status);
     }
 
+    public boolean updateRunStatusCompleted(Run resource) {
+
+        Resource<Run> r = kube.resources(Run.class).inNamespace(resource.getMetadata().getNamespace())
+                .withName(resource.getMetadata().getName());
+
+        RunStatus status = resource.getStatus() == null ? new RunStatus() : resource.getStatus();
+
+        List<Map<String, Object>> conditions = status.getConditions();
+
+        if (conditions == null) {
+            conditions = new ArrayList<>();
+            status.setConditions(conditions);
+        } else {
+            conditions.clear();
+        }
+
+        Map<String, Object> initial = new HashMap<>();
+        initial.put("status", "True");
+        initial.put("reason", "Succeeded");
+        initial.put("message", "Approval Task has been completed");
+        initial.put("type", "Succeeded");
+        initial.put("lastTransitionTime",
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")));
+        conditions.add(initial);
+
+        r.patchStatus(resource);
+
+        return false;
+
+    }
 }

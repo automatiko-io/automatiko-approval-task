@@ -44,4 +44,9 @@ public class RunStatus implements KubernetesResource {
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
+
+    @Override
+    public String toString() {
+        return "RunStatus [startTime=" + startTime + ", results=" + results + ", conditions=" + conditions + "]";
+    }
 }

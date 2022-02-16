@@ -19,13 +19,13 @@
   <bpmn2:message id="Message_2" itemRef="ItemDefinition_71" name="deleted"/>
   <bpmn2:message id="Message_3" itemRef="ItemDefinition_71" name="updated"/>
   <bpmn2:interface id="Interface_2" implementationRef="io.automatiko.tekton.task.approval.internal.ApprovalTaskResourceOperations" name="ApprovalTaskOperations">
-    <bpmn2:operation id="Operation_2" name="updateRunStatusCompleted"/>
     <bpmn2:operation id="Operation_3" name="updateRunStatusCreated"/>
     <bpmn2:operation id="Operation_5" name="updateRunStatusFailed"/>
     <bpmn2:operation id="Operation_6" name="initializeApprovalTask"/>
     <bpmn2:operation id="Operation_7" name="updateApprovalTaskStatusCompleted"/>
     <bpmn2:operation id="Operation_8" name="updateApprovalTask"/>
     <bpmn2:operation id="Operation_9" name="deleteApprovalTask"/>
+    <bpmn2:operation id="Operation_1" name="updateRunResultsCompleted"/>
   </bpmn2:interface>
   <bpmn2:process id="approvals" automatiko:packageName="io.automatiko.tekton.tasks.approval" name="Basic Approval Task" isExecutable="true" processType="Public">
     <bpmn2:documentation id="Documentation_1"><![CDATA[Approval Task implementation for Tekton Pipelines]]></bpmn2:documentation>
@@ -35,7 +35,7 @@
       <automatiko:import name="io.automatiko.engine.quarkus.operator.ops.CustomResourceOperations"/>
       <automatiko:import name="io.automatiko.tekton.task.approval.internal.ApprovalTaskResourceOperations"/>
       <automatiko:metaData name="tags">
-        <automatiko:metaValue><![CDATA[#{pipelineTag(resource)},#{decisionTag(resource)}]]></automatiko:metaValue>
+        <automatiko:metaValue><![CDATA[#{pipelineTag(resource)},#{decisionTag(resource)},#{responsesTag(resource)}]]></automatiko:metaValue>
       </automatiko:metaData>
       <automatiko:metaData name="description">
         <automatiko:metaValue><![CDATA[#{approvalInstanceDescription(resource)}]]></automatiko:metaValue>
@@ -247,7 +247,7 @@
         <bpmn2:targetRef>DataInput_11</bpmn2:targetRef>
       </bpmn2:dataInputAssociation>
     </bpmn2:serviceTask>
-    <bpmn2:serviceTask id="ServiceTask_2" name="Update run status" implementation="Java" operationRef="Operation_2">
+    <bpmn2:serviceTask id="ServiceTask_2" name="Update run status" implementation="Java" operationRef="Operation_1">
       <bpmn2:extensionElements>
         <automatiko:metaData name="elementname">
           <automatiko:metaValue><![CDATA[Update run status]]></automatiko:metaValue>

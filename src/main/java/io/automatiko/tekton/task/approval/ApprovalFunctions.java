@@ -1,5 +1,6 @@
 package io.automatiko.tekton.task.approval;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -7,6 +8,8 @@ import java.util.stream.Collectors;
 import io.automatiko.engine.api.Functions;
 import io.automatiko.engine.api.runtime.process.ProcessContext;
 import io.automatiko.tekton.task.run.Run;
+import io.automatiko.tekton.task.run.RunStatus;
+import io.fabric8.kubernetes.api.model.Duration;
 
 public class ApprovalFunctions implements Functions {
 
@@ -64,6 +67,30 @@ public class ApprovalFunctions implements Functions {
         }
 
         return resource.getStatus().getResults().size() > 0;
+    }
+
+    public static boolean isCompleted(Run resource) {
+        if (resource.getStatus() == null) {
+            return false;
+        }
+
+        RunStatus status = resource.getStatus();
+
+        List<Map<String, Object>> conditions = status.getConditions();
+
+        if (conditions == null) {
+            return false;
+        } else {
+            String currentStatus = (String) conditions.stream().filter(item -> item.containsKey("status"))
+                    .map(item -> item.get("status")).findFirst()
+                    .orElse(null);
+
+            if (currentStatus == null || currentStatus.equalsIgnoreCase("Unknown")) {
+                return false;
+            }
+
+            return true;
+        }
     }
 
     public static boolean hasStatusSet(ApprovalTask resource) {
@@ -152,6 +179,23 @@ public class ApprovalFunctions implements Functions {
 
         context.setVariable("comment", comment);
         context.setVariable("approved", decision);
+    }
+
+    public static String kubeDurationToIso(Run run) {
+        try {
+            Duration duration = Duration.parse(run.getSpec().getTimeout());
+            return duration.getDuration().toString();
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static boolean hasTimer(Run resource) {
+        if (resource.getSpec().getTimeout() != null && !resource.getSpec().getTimeout().isEmpty()) {
+            return true;
+        }
+
+        return false;
     }
 
 }
