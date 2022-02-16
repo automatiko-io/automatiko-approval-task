@@ -265,6 +265,63 @@ To enable email notification, approval tasks deployment must be equipped with ad
 
 Above properties must be set based on your email server before deployment.
 
+#### Configure persistence
+
+By default Approval Tasks container runs with file system based persistence. It can actually be used like that as it can easily recover all running instances of pipeline runs that require approvals but it can lead to duplicated email notification being sent. 
+
+To avoid that and preserve running instances across restarts of the container behind approval tasks you can easily use persistent volumes to be mounted to the container.
+
+IMPORTANT: Persistent volume used for storage for approval tasks data should use file system that have support for 
+[extended attributes](https://en.wikipedia.org/wiki/Extended_file_attributes). Using such file system will significantly improve performance in case there are many active instances of approval tasks.
+
+To configure persistent volume for approval tasks, first create persistent volume claim
+
+````
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: approvaltasks-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+````
+
+Next, modify deployment of approval task to use the persistent volume claim
+
+````
+spec:
+  volumes:
+   - name: approvaltasks-pv-storage
+     persistentVolumeClaim:
+       claimName: approvaltasks-pv-claim
+  containers:
+````
+
+mount the volume to a path
+
+````
+  volumeMounts:
+   - mountPath: "/data"
+     name: task-pv-storage
+````
+
+and set additional environment variables to instruct it where data should be stored
+
+````
+- name: QUARKUS_AUTOMATIKO_PERSISTENCE_FILESYSTEM_PATH
+  value: /data/processes
+- name: QUARKUS_AUTOMATIKO_JOBS_FILESYSTEM_PATH
+  value: /data/jobs  
+````
+
+This will configure all the persistent data to be stored in external storage.
+
+A complete example can be found in [k8s/kubernetes-basic-pv.yml](k8s/kubernetes-basic-pv.yml)
+
 #### Ingress
 
 Default deployment scripts create on service but not ingress as it really depends on your target kubernetes cluser. So this needs to be configured separately and the URL used on the ingress must be used for `QUARKUS_AUTOMATIKO_SERVICE_URL` in deployment.

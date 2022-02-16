@@ -2,7 +2,7 @@
 
 ## Documentation
 
-- [ ] document file system based persistence
+- [x] document file system based persistence
 - [ ] document extensibility via modified workflows
 - [ ] document extensibility via added custom workflows
 - [ ] document deployment to OpenShift based tekton installations
@@ -14,7 +14,7 @@
 ## Features
 
 - [x] add support for timeouts
-- [ ] add support for cancelation
+- [x] add support for cancellation
 - [ ] add additional strategies
 - [ ] add mongo db based persistence
 - [ ] additional notification channels (teams, slack, etc)
