@@ -86,7 +86,8 @@ Single strategy means that there will be just one task created, regardless how m
 
 #### MULTI
 
-Multi strategy means that for every approver set there will be dedicated task assigned and each and every one of them must make the decision to continue pipeline run.
+Multi strategy means that for every approver set there will be dedicated task assigned and each and every one of them must make the decision to continue pipeline run. Since the multi strategy assumes that decision must be unanimous the decision is 
+considered rejected as soon as one approver marks it as rejected.
 
 ### Results
 

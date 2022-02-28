@@ -1,6 +1,7 @@
 package io.automatiko.tekton.task.approval;
 
 import java.text.ParseException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -198,4 +199,11 @@ public class ApprovalFunctions implements Functions {
         return false;
     }
 
+    public static boolean isAlreadyRejected(Collection<ApprovalResults> results) {
+        if (results != null) {
+            return results.stream().anyMatch(r -> Boolean.parseBoolean(r.getDecision()) == false);
+        }
+
+        return false;
+    }
 }

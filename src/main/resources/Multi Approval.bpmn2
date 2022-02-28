@@ -76,6 +76,7 @@
         <bpmn2:loopDataOutputRef>DataOutput_5</bpmn2:loopDataOutputRef>
         <bpmn2:inputDataItem xsi:type="bpmn2:tDataInput" id="approver" itemSubjectRef="ItemDefinition_403" name="approver"/>
         <bpmn2:outputDataItem xsi:type="bpmn2:tDataOutput" id="result" itemSubjectRef="ItemDefinition_567" name="result"/>
+        <bpmn2:completionCondition xsi:type="bpmn2:tFormalExpression" id="FormalExpression_4" language="http://www.java.com/java">isAlreadyRejected(results)</bpmn2:completionCondition>
       </bpmn2:multiInstanceLoopCharacteristics>
       <bpmn2:startEvent id="StartEvent_2" name="item start">
         <bpmn2:extensionElements>
@@ -284,7 +285,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_ServiceTask_1" bpmnElement="ServiceTask_1" isExpanded="true">
         <dc:Bounds height="50.0" width="110.0" x="555.0" y="256.0"/>
-        <bpmndi:BPMNLabel>
+        <bpmndi:BPMNLabel id="BPMNLabel_13">
           <dc:Bounds height="11.0" width="74.0" x="573.0" y="275.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
@@ -333,14 +334,14 @@
         <di:waypoint xsi:type="dc:Point" x="522.0" y="279.0"/>
         <di:waypoint xsi:type="dc:Point" x="522.0" y="281.0"/>
         <di:waypoint xsi:type="dc:Point" x="555.0" y="281.0"/>
-        <bpmndi:BPMNLabel/>
+        <bpmndi:BPMNLabel id="BPMNLabel_17"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_DataInputAssociation_1" bpmnElement="DataInputAssociation_6" sourceElement="BPMNShape_DataObject_1" targetElement="BPMNShape_ServiceTask_1">
         <di:waypoint xsi:type="dc:Point" x="178.0" y="400.0"/>
         <di:waypoint xsi:type="dc:Point" x="178.0" y="353.0"/>
         <di:waypoint xsi:type="dc:Point" x="610.0" y="353.0"/>
         <di:waypoint xsi:type="dc:Point" x="610.0" y="306.0"/>
-        <bpmndi:BPMNLabel/>
+        <bpmndi:BPMNLabel id="BPMNLabel_18"/>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

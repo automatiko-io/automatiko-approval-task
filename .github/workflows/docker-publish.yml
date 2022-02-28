@@ -1,0 +1,28 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java#apache-maven-with-a-settings-path
+
+name: Docker publish
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - name: Docker login
+      env:
+        QUARKUS_CONTAINER_IMAGE_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        QUARKUS_CONTAINER_IMAGE_USERNAME: automatiko
+      run: docker login -u $QUARKUS_CONTAINER_IMAGE_USERNAME -p $QUARKUS_CONTAINER_IMAGE_PASSWORD
+    - name: Build Automatiko Approval Tasks
+      run: mvn -B -Dquarkus.container-image.additional-tags=latest -Dquarkus.container-image.push=true -Dquarkus.container-image.group=automatiko  package -Pcontainer-native --file pom.xml

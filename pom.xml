@@ -5,14 +5,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.automatiko.tekton</groupId>
   <artifactId>automatiko-approval-task</artifactId>
-  <version>0.0.2</version>
+  <version>0.1.0</version>
 
   <name>Automatiko Tekton Approval Task</name>
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
 
   <properties>
-    <quarkus.version>2.6.2.Final</quarkus.version>
-    <automatiko.version>0.0.0-SNAPSHOT</automatiko.version>
+    <quarkus.version>2.7.0.Final</quarkus.version>
+    <automatiko.version>0.13.0</automatiko.version>
     <surefire.version>2.22.1</surefire.version>
     <compiler.version>3.8.1</compiler.version>
 
@@ -39,33 +39,33 @@
       <groupId>io.automatiko.quarkus</groupId>
       <artifactId>automatiko-operator</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-filesystem-persistence-addon</artifactId>
     </dependency>
-    
+
     <!-- automatiko process management addon - optional -->
     <dependency>
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-process-management-addon</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-user-tasks-management-addon</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-user-tasks-email-addon</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcpkix-jdk15on</artifactId>
@@ -74,14 +74,14 @@
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcprov-jdk15on</artifactId>
     </dependency>
-    
+
     <!--  validation - optional -->
-    <!-- 
+    <!--
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-validator</artifactId>
     </dependency>
-     -->    
+     -->
 
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -266,8 +266,8 @@
           <artifactId>quarkus-container-image-jib</artifactId>
         </dependency>
       </dependencies>
-      <properties>        
-        <quarkus.package.type>native</quarkus.package.type>        
+      <properties>
+        <quarkus.package.type>native</quarkus.package.type>
         <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime, --allow-incomplete-classpath</quarkus.native.additional-build-args>
         <quarkus.native.container-build>true</quarkus.native.container-build>
         <quarkus.container-image.build>true</quarkus.container-image.build>
