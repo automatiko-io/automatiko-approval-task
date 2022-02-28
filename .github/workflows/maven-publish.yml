@@ -17,6 +17,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: automatiko-approval-tasks
     - uses: actions/checkout@v2
       with:
         repository: automatiko-io/automatiko-engine
@@ -28,4 +30,4 @@ jobs:
     - name: Build Automatiko
       run: mvn -B install -DskipTests --file automatiko/pom.xml
     - name: Build Automatiko Approval Tasks
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file automatiko-approval-tasks/pom.xml
