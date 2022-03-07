@@ -342,7 +342,7 @@ By default Approval tasks are configured to be open, meaning do not require auth
 even without authentication users must know both pipeline run name and the user id (or email) that the task is assigned to.
 
 In many situations, authentication is required and to comply with this requirements Approval Task takes advantage of
-[https://oauth2-proxy.github.io/oauth2-proxy](OAuth proxy) that allows to configure it with various identity providers
+[OAuth proxy](https://oauth2-proxy.github.io/oauth2-proxy) that allows to configure it with various identity providers
 such as 
 - Google
 - Azure
@@ -400,7 +400,7 @@ First is the deployment to define the second container with OAuth
 Important parts to note
 
 - `QUARKUS_PROFILE` is set to `secured` which configures the service to require authentication, it can also be set to `securedwithemail` if both security and email notifications are desired
-- a new container `oauth-proxy` is added with configured GitHub provider, see all configuration options [https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/oauth_provider](here)
+- a new container `oauth-proxy` is added with configured GitHub provider, see all configuration options [here](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/oauth_provider)
 - approval task is (as usual) exposed via 8080 port
 - oauth proxy is exposed via 8888 port
 
