@@ -5,7 +5,7 @@ metadata:
   annotations:
     app.quarkus.io/build-timestamp: 2022-02-05 - 11:22:03 +0000
   labels:
-    app.kubernetes.io/version: 0.0.1
+    app.kubernetes.io/version: 0.1.0
     app.kubernetes.io/name: automatiko-approval-task
   name: automatiko-approval-task
 ---
@@ -16,7 +16,7 @@ metadata:
     app.quarkus.io/build-timestamp: 2022-02-05 - 11:22:03 +0000
   labels:
     app.kubernetes.io/name: automatiko-approval-task
-    app.kubernetes.io/version: 0.0.1
+    app.kubernetes.io/version: 0.1.0
   name: automatiko-approval-task
 spec:
   ports:
@@ -25,7 +25,7 @@ spec:
       targetPort: 8080
   selector:
     app.kubernetes.io/name: automatiko-approval-task
-    app.kubernetes.io/version: 0.0.1
+    app.kubernetes.io/version: 0.1.0
   type: ClusterIP
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -148,21 +148,21 @@ metadata:
   annotations:
     app.quarkus.io/build-timestamp: 2022-02-05 - 11:22:03 +0000
   labels:
-    app.kubernetes.io/version: 0.0.1
+    app.kubernetes.io/version: 0.1.0
     app.kubernetes.io/name: automatiko-approval-task
   name: automatiko-approval-task
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/version: 0.0.1
+      app.kubernetes.io/version: 0.1.0
       app.kubernetes.io/name: automatiko-approval-task
   template:
     metadata:
       annotations:
         app.quarkus.io/build-timestamp: 2022-02-05 - 11:22:03 +0000
       labels:
-        app.kubernetes.io/version: 0.0.1
+        app.kubernetes.io/version: 0.1.0
         app.kubernetes.io/name: automatiko-approval-task
     spec:
       containers:
@@ -187,7 +187,7 @@ spec:
               value: password       
             - name: QUARKUS_PROFILE
               value: withemail                      
-          image: automatiko/automatiko-approval-task:0.0.1
+          image: automatiko/automatiko-approval-task
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3

@@ -22,7 +22,7 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: 8080
+      targetPort: 8888
   selector:
     app.kubernetes.io/name: automatiko-approval-task
     app.kubernetes.io/version: 0.1.0
@@ -142,17 +142,6 @@ subjects:
     name: automatiko-approval-task
     namespace: default
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: approvaltask-pv-claim
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -177,9 +166,6 @@ spec:
         app.kubernetes.io/name: automatiko-approval-task
     spec:
       volumes:
-       - name: approvaltask-pv-storage
-         persistentVolumeClaim:
-           claimName: approvaltask-pv-claim    
       containers:
         - env:
             - name: KUBERNETES_NAMESPACE
@@ -189,13 +175,12 @@ spec:
             - name: QUARKUS_OPERATOR_SDK_NAMESPACES
               value: default
             - name: QUARKUS_AUTOMATIKO_SERVICE_URL
-              value: http://localhost:9000     
-            - name: QUARKUS_AUTOMATIKO_PERSISTENCE_FILESYSTEM_PATH
-              value: /data/processes
-            - name: QUARKUS_AUTOMATIKO_JOBS_FILESYSTEM_PATH
-              value: /data/jobs                                 
+              value: https://5486-91-236-84-34.ngrok.io 
+            - name: QUARKUS_PROFILE
+              value: secured          
           image: automatiko/automatiko-approval-task
           imagePullPolicy: Always
+          name: automatiko-approval-task
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -211,9 +196,6 @@ spec:
             - containerPort: 8080
               name: http
               protocol: TCP
-          volumeMounts:
-           - mountPath: "/data"
-             name: approvaltask-pv-storage              
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -224,4 +206,22 @@ spec:
             periodSeconds: 30
             successThreshold: 1
             timeoutSeconds: 10
+        - name: oauth-proxy 
+          args:
+            - --provider=github
+            - --https-address=
+            - --http-address=:8888
+            - --email-domain=*
+            - --prefer-email-to-user=true
+            - --upstream=http://localhost:8080
+            - --client-id=GITHUB_CLIENT_ID
+            - --client-secret=GITHUB_CLIENT_SECRET
+            - --cookie-secret=0rM16Iv8aSvlOZYXuabusXO98_y6Yf7QYjcIhXk67Dw=
+            - --pass-access-token=true
+          image: quay.io/oauth2-proxy/oauth2-proxy
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: oauth-proxy
+              containerPort: 8888    
+              protocol: TCP           
       serviceAccountName: automatiko-approval-task

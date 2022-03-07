@@ -369,7 +369,7 @@ First is the deployment to define the second container with OAuth
               value: https://my-public-known-host.com 
             - name: QUARKUS_PROFILE
               value: secured                
-          image: automatiko/automatiko-approval-task:0.1.0
+          image: automatiko/automatiko-approval-task
           imagePullPolicy: IfNotPresent
           name: automatiko-approval-task
           ports:
@@ -388,7 +388,6 @@ First is the deployment to define the second container with OAuth
             - --client-secret=GITHUB_CLIENT_SECRET
             - --cookie-secret=0rM16Iv8aSvlOZYXuabusXO98_y6Yf7QYjcIhXk67Dw=
             - --pass-access-token=true
-            - --skip-auth-route=^/q/health
           image: quay.io/oauth2-proxy/oauth2-proxy
           imagePullPolicy: IfNotPresent
           ports:
@@ -427,6 +426,8 @@ spec:
 
 This will then go via oauth proxy container before the approval task is accessed ensuring that all traffic to the application
 is secured.
+
+A complete example can be found in [k8s/kubernetes-oauth.yml](k8s/kubernetes-oauth.yml)
 
 # Use it
 
