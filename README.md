@@ -336,6 +336,98 @@ kubectl port-forward svc/automatiko-approval-task 9000:80
 
 ````
 
+#### Secure access to approval tasks
+
+By default Approval tasks are configured to be open, meaning do not require authentication to access approval task but 
+even without authentication users must know both pipeline run name and the user id (or email) that the task is assigned to.
+
+In many situations, authentication is required and to comply with this requirements Approval Task takes advantage of
+[https://oauth2-proxy.github.io/oauth2-proxy](OAuth proxy) that allows to configure it with various identity providers
+such as 
+- Google
+- Azure
+- Facebook
+- GitHub 
+- and others
+
+Security is built based on side car that runs the OAuth proxy and only that container is exposed via service and then ingress.
+
+Here are the relevant parts of the deployment manifest that configures it
+
+First is the deployment to define the second container with OAuth
+
+````
+ containers:
+        - env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: QUARKUS_OPERATOR_SDK_NAMESPACES
+              value: default
+            - name: QUARKUS_AUTOMATIKO_SERVICE_URL
+              value: https://my-public-known-host.com 
+            - name: QUARKUS_PROFILE
+              value: secured                
+          image: automatiko/automatiko-approval-task:0.1.0
+          imagePullPolicy: IfNotPresent
+          name: automatiko-approval-task
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+        - name: oauth-proxy 
+          args:
+            - --provider=github
+            - --https-address=
+            - --http-address=:8888
+            - --email-domain=*
+            - --prefer-email-to-user=true
+            - --upstream=http://localhost:8080
+            - --client-id=GITHUB_CLIENT_ID
+            - --client-secret=GITHUB_CLIENT_SECRET
+            - --cookie-secret=0rM16Iv8aSvlOZYXuabusXO98_y6Yf7QYjcIhXk67Dw=
+            - --pass-access-token=true
+            - --skip-auth-route=^/q/health
+          image: quay.io/oauth2-proxy/oauth2-proxy
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: oauth-proxy
+              containerPort: 8888    
+              protocol: TCP      
+````
+
+Important parts to note
+
+- `QUARKUS_PROFILE` is set to `secured` which configures the service to require authentication, it can also be set to `securedwithemail` if both security and email notifications are desired
+- a new container `oauth-proxy` is added with configured GitHub provider, see all configuration options [https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/oauth_provider](here)
+- approval task is (as usual) exposed via 8080 port
+- oauth proxy is exposed via 8888 port
+
+Next is to configure the service to go via oauth proxy instead of approval task
+
+````
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: automatiko-approval-task
+    app.kubernetes.io/version: 0.0.1
+  name: automatiko-approval-task
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8888
+  selector:
+    app.kubernetes.io/name: automatiko-approval-task
+    app.kubernetes.io/version: 0.0.1
+  type: ClusterIP
+````
+
+This will then go via oauth proxy container before the approval task is accessed ensuring that all traffic to the application
+is secured.
+
 # Use it
 
 Once a instance is complete you can deploy the task and pipeline to get the first approval task from Tekton pipeline.
