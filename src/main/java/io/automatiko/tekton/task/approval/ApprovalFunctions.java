@@ -22,6 +22,22 @@ public class ApprovalFunctions implements Functions {
         return resource.getSpec().getApprovers().stream().collect(Collectors.joining(","));
     }
 
+    public static String groupsAsString(ApprovalTask resource) {
+        if (resource.getSpec().getGroups() == null || resource.getSpec().getGroups().isEmpty()) {
+            return "";
+        }
+
+        return resource.getSpec().getGroups().stream().collect(Collectors.joining(","));
+    }
+
+    public static boolean isGroupApproval(ApprovalTask resource) {
+        if (resource.getSpec().getGroups() != null && !resource.getSpec().getGroups().isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static boolean hasApprovalTaskRef(Run eventData) {
         if (eventData.getSpec() != null) {
             String apiVersion = (String) eventData.getSpec().getRef().getApiVersion();

@@ -49,6 +49,7 @@ public class ApprovalTaskResourceOperations {
             spec.setPipeline(
                     (String) runSpec.findParam("pipeline", runResource.getMetadata().getName()));
             spec.setApprovers((List<String>) runSpec.findParam("approvers", Collections.emptyList()));
+            spec.setGroups((List<String>) runSpec.findParam("groups", Collections.emptyList()));
             String strategy = (String) runSpec.findParam("strategy", "SINGLE");
             try {
 
@@ -64,7 +65,13 @@ public class ApprovalTaskResourceOperations {
 
             Map<String, String> labels = new HashMap<>();
             labels.put("decision", "pending");
-            labels.put("responses", "0_of_" + (spec.getApprovers().size() == 0 ? 1 : spec.getApprovers().size()));
+            if (!spec.getGroups().isEmpty()) {
+                labels.put("responses", "0_of_" + spec.getGroups().size());
+            } else if (!spec.getApprovers().isEmpty()) {
+                labels.put("responses", "0_of_" + spec.getApprovers().size());
+            } else {
+                labels.put("responses", "0_of_1");
+            }
 
             item.getMetadata().setLabels(labels);
             item.setSpec(spec);
@@ -289,9 +296,14 @@ public class ApprovalTaskResourceOperations {
                 } else {
                     current = "0";
                 }
-                ed.getMetadata().getLabels().put("responses", current + "_of_"
-                        + (resource.getSpec().getApprovers().size() == 0 ? 1 : resource.getSpec().getApprovers().size()));
 
+                if (!resource.getSpec().getGroups().isEmpty()) {
+                    ed.getMetadata().getLabels().put("responses", current + "_of_" + resource.getSpec().getGroups().size());
+                } else if (!resource.getSpec().getApprovers().isEmpty()) {
+                    ed.getMetadata().getLabels().put("responses", current + "_of_" + resource.getSpec().getApprovers().size());
+                } else {
+                    ed.getMetadata().getLabels().put("responses", current + "_of_1");
+                }
                 return ed;
             });
         }

@@ -19,6 +19,7 @@ public class ApprovalSpec implements KubernetesResource {
 
     private String description;
     private List<String> approvers;
+    private List<String> groups;
     private String pipeline;
     private Strategy strategy;
 
@@ -36,6 +37,14 @@ public class ApprovalSpec implements KubernetesResource {
 
     public void setApprovers(List<String> recipient) {
         this.approvers = recipient;
+    }
+
+    public List<String> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<String> groups) {
+        this.groups = groups;
     }
 
     public String getPipeline() {
@@ -56,8 +65,8 @@ public class ApprovalSpec implements KubernetesResource {
 
     @Override
     public String toString() {
-        return "ApprovalSpec [description=" + description + ", approvers=" + approvers + ", pipeline=" + pipeline
-                + ", strategy=" + strategy + "]";
+        return "ApprovalSpec [description=" + description + ", approvers=" + approvers + ", groups=" + groups + ", pipeline="
+                + pipeline + ", strategy=" + strategy + "]";
     }
 
 }

@@ -146,9 +146,6 @@ iframe {
   margin-bottom: 20px;
 }
 
-.rs1-wrap-input100 {
-  width: calc((100% - 30px) / 2);
-}
 
 .label-input100 {
   font-family: Arial;
@@ -282,12 +279,6 @@ textarea.input100 {
 /*------------------------------------------------------------------
 [ Responsive ]*/
 
-@media (max-width: 768px) {
-  .rs1-wrap-input100 {
-    width: 100%;
-  }
-
-}
 
 @media (max-width: 576px) {
   .wrap-contact100 {

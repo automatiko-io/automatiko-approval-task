@@ -51,6 +51,7 @@ rules:
     resources:
       - approvaltasks
       - approvaltasks/status
+      - approvaltasks/finalizers
     verbs:
       - get
       - list
@@ -83,6 +84,7 @@ rules:
     resources:
       - runs
       - runs/status
+      - runs/finalizers
     verbs:
       - get
       - list
@@ -159,22 +161,22 @@ metadata:
   annotations:
     app.quarkus.io/build-timestamp: 2022-02-05 - 11:22:03 +0000
   labels:
-    app.kubernetes.io/version: 0.1.0
     app.kubernetes.io/name: automatiko-approval-task
+    app.kubernetes.io/version: 0.2.0
   name: automatiko-approval-task
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/version: 0.1.0
       app.kubernetes.io/name: automatiko-approval-task
+      app.kubernetes.io/version: 0.2.0
   template:
     metadata:
       annotations:
         app.quarkus.io/build-timestamp: 2022-02-05 - 11:22:03 +0000
       labels:
-        app.kubernetes.io/version: 0.1.0
         app.kubernetes.io/name: automatiko-approval-task
+        app.kubernetes.io/version: 0.2.0
     spec:
       volumes:
        - name: approvaltask-pv-storage

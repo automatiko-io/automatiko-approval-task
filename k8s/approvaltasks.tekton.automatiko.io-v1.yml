@@ -26,6 +26,10 @@ spec:
                 items:
                   type: string
                 type: array
+              groups:
+                items:
+                  type: string
+                type: array
               pipeline:
                 type: string
               description:

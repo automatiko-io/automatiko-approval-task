@@ -5,14 +5,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.automatiko.tekton</groupId>
   <artifactId>automatiko-approval-task</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 
   <name>Automatiko Tekton Approval Task</name>
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
 
   <properties>
-    <quarkus.version>2.7.0.Final</quarkus.version>
-    <automatiko.version>0.13.0</automatiko.version>
+    <quarkus.version>2.9.2.Final</quarkus.version>
+    <automatiko.version>0.16.0</automatiko.version>
     <surefire.version>2.22.1</surefire.version>
     <compiler.version>3.8.1</compiler.version>
 

@@ -76,18 +76,21 @@ It accepts several parameters
 - **pipeline** - name of the pipeline this approval is associated with
 - **description** - human focused description of the operation to be done
 - **approvers** - list of approvers (usernames or email addresses) that task should be assigned to
+- **groups** - list of groups of approvers that task should be assigned to
 - **strategy** - strategy of the approval task - currently supported **SINGLE** and **MULTI** - if not set defaults to SINGLE
+
+Note that **approvers** and **groups** are mutually exclusive meaning only one of them will be used. If groups are set they will take precedence and approvals will be based on group assignment.
 
 ### Strategies
 
 #### SINGLE
 
-Single strategy means that there will be just one task created, regardless how many approvers where set. Each approver is equally eligible to approve or reject the task ad once one of them decides the pipeline will continue.
+Single strategy means that there will be just one task created, regardless how many approvers/groups where set. Each approver/group is equally eligible to approve or reject the task ad once one of them decides the pipeline will continue.
 
 #### MULTI
 
-Multi strategy means that for every approver set there will be dedicated task assigned and each and every one of them must make the decision to continue pipeline run. Since the multi strategy assumes that decision must be unanimous the decision is 
-considered rejected as soon as one approver marks it as rejected.
+Multi strategy means that for every approver/group there will be dedicated task assigned and each and every one of them must make the decision to continue pipeline run. Since the multi strategy assumes that decision must be unanimous the decision is 
+considered rejected as soon as one approver/group marks it as rejected.
 
 ### Results
 
@@ -450,7 +453,7 @@ and when going to YAML view you will see an `approvalUrl` in the status section.
 
 <img src="img/9.png" width="800px"/>
 
-If you use single strategy and assigned approvers to it, you mign need to append `?user=YOUR_USER_NAME` to the url.
+If you use single strategy and assigned approvers to it, you might need to append `?user=YOUR_USER_NAME` or `?group=YOUR_GROUP` to the url. Groups can be given multiple times.
 
 <img src="img/10.png" width="800px"/>
 

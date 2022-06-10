@@ -9,7 +9,7 @@
 
 ## Security
 
-- [ ] implement OIDC / OAuth based security for approval tasks
+- [x] implement OIDC / OAuth based security for approval tasks
 
 ## Features
 
