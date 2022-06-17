@@ -3,6 +3,17 @@
 Automatiko Approval Tasks is an implementation for [Tekton](https://tekton.dev) that allows to pause the execution 
 of the pipeline run and wait for approval by human actors. It is an implementation based on [custom tasks](https://tekton.dev/docs/pipelines/runs/) of Tekton that is currently in *v1alpha1* stage which is considered not stable.
 
+## Blogs and videos
+
+- [Tekton Approvals based on Automatiko](https://blog.automatiko.io/2022/02/12/tekton-approvals.html)
+- [Secured Tekton approvals based on Automatiko](https://blog.automatiko.io/2022/03/06/tekton-approvals-secuired.html)
+
+
+- [Introduction](https://youtu.be/XPSDyOHN0r8)
+- [OAuth proxy based authentication](https://youtu.be/jIN-GiU6r5o)
+- [Group and four eye approvals](https://youtu.be/oJmLzV7OU_k)
+
+
 ## Features
 
 See [Roadmap](Roadmap.md) for already defined features to be added. Feel free to ask for additional ones either by creating an issue or adding to the roadmap.
@@ -77,7 +88,7 @@ It accepts several parameters
 - **description** - human focused description of the operation to be done
 - **approvers** - list of approvers (usernames or email addresses) that task should be assigned to
 - **groups** - list of groups of approvers that task should be assigned to
-- **strategy** - strategy of the approval task - currently supported **SINGLE** and **MULTI** - if not set defaults to SINGLE
+- **strategy** - strategy of the approval task - currently supported **SINGLE**, **MULTI** and **FOUR_EYES** - if not set defaults to SINGLE
 
 Note that **approvers** and **groups** are mutually exclusive meaning only one of them will be used. If groups are set they will take precedence and approvals will be based on group assignment.
 
@@ -91,6 +102,11 @@ Single strategy means that there will be just one task created, regardless how m
 
 Multi strategy means that for every approver/group there will be dedicated task assigned and each and every one of them must make the decision to continue pipeline run. Since the multi strategy assumes that decision must be unanimous the decision is 
 considered rejected as soon as one approver/group marks it as rejected.
+
+#### FOUR_EYES
+
+Four eyes strategy is based on four eyes principle when it comes to approvals. It means that the approval is a two step process. Both steps are assigned to the same group but the second task cannot be completed by the user 
+who completed the first one. For the approval to be considered approved both steps must be approved. In case first step is rejected, the approval task is rejected as well and by that second step is not initiated.
 
 ### Results
 
@@ -171,6 +187,15 @@ In the form you need to provide
 - approver - approver (user name or email or whatever else was used in pipeline definition) that tasks should be found for
 
 This will provide a list of tasks available with links to the form to provide decision.
+
+### Approval dashboard
+
+Version 0.3.0 introduced a dashboard like endpoint that allows users to receive real time updates on thier approval tasks. A sample page that allows to specify user and group can be found at `/tasks.html` path of your approval
+task site. Once user connects to the approval tasks the tasks will automatically show up on the board. 
+
+<img src="img/13.png" width="800px"/>
+
+In addition, tasks that were completed automatically disappear from the board as well.
 
 ### Management view (for admins only)
 

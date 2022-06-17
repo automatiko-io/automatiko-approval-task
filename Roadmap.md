@@ -15,10 +15,10 @@
 
 - [x] add support for timeouts
 - [x] add support for cancellation
-- [ ] add additional strategies
+- [x] add additional strategies
 - [ ] add mongo db based persistence
 - [ ] additional notification channels (teams, slack, etc)
-- [ ] websocket based endpoint to display new tasks/clean completed tasks automatically
+- [x] websocket based endpoint to display new tasks/clean completed tasks automatically
 
 ## Testability
 

@@ -189,6 +189,16 @@ public class ApprovalFunctions implements Functions {
         return false;
     }
 
+    public static boolean isFourEyesApprovalStrategy(ApprovalTask resource) {
+
+        if (resource.getSpec().getStrategy() == null
+                || resource.getSpec().getStrategy().equals(ApprovalSpec.Strategy.FOUR_EYES)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static void calculateOutcome(List<ApprovalResults> results, ProcessContext context) {
         boolean decision = results.stream().allMatch(result -> "true".equalsIgnoreCase(result.getDecision()));
         String comment = results.stream().map(result -> result.getComment()).filter(c -> c != null)

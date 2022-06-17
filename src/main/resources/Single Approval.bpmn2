@@ -37,6 +37,8 @@
         <bpmn2:dataInput id="DataInput_2" name="Exluded users"/>
         <bpmn2:dataInput id="DataInput_3" name="Groups"/>
         <bpmn2:dataInput id="DataInput_4" itemSubjectRef="ItemDefinition_453" name="spec"/>
+        <bpmn2:dataInput id="DataInput_10" itemSubjectRef="ItemDefinition_403" name="Description"/>
+        <bpmn2:dataInput id="DataInput_13" itemSubjectRef="ItemDefinition_403" name="FormName"/>
         <bpmn2:dataOutput id="DataOutput_1" itemSubjectRef="ItemDefinition_152" name="approval"/>
         <bpmn2:dataOutput id="DataOutput_2" itemSubjectRef="ItemDefinition_403" name="comment"/>
         <bpmn2:inputSet id="_InputSet_4">
@@ -44,6 +46,8 @@
           <bpmn2:dataInputRefs>DataInput_2</bpmn2:dataInputRefs>
           <bpmn2:dataInputRefs>DataInput_3</bpmn2:dataInputRefs>
           <bpmn2:dataInputRefs>DataInput_4</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>DataInput_10</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>DataInput_13</bpmn2:dataInputRefs>
         </bpmn2:inputSet>
         <bpmn2:outputSet id="OutputSet_1" name="Output Set">
           <bpmn2:dataOutputRefs>DataOutput_1</bpmn2:dataOutputRefs>
@@ -68,6 +72,20 @@
         <bpmn2:assignment id="Assignment_4">
           <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="FormalExpression_10">#{resource.getSpec()}</bpmn2:from>
           <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="FormalExpression_8">DataInput_4</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="DataInputAssociation_10">
+        <bpmn2:targetRef>DataInput_10</bpmn2:targetRef>
+        <bpmn2:assignment id="Assignment_2">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="FormalExpression_5">#{\&quot;Approval task for \&quot; +resource.getSpec().getPipeline()}</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="FormalExpression_3">DataInput_10</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="DataInputAssociation_13">
+        <bpmn2:targetRef>DataInput_13</bpmn2:targetRef>
+        <bpmn2:assignment id="Assignment_9">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="FormalExpression_22">approval</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="FormalExpression_20">DataInput_13</bpmn2:to>
         </bpmn2:assignment>
       </bpmn2:dataInputAssociation>
       <bpmn2:dataOutputAssociation id="DataOutputAssociation_1">
@@ -143,6 +161,8 @@
         <bpmn2:dataInput id="DataInput_7" name="Exluded users"/>
         <bpmn2:dataInput id="DataInput_8" name="Groups"/>
         <bpmn2:dataInput id="DataInput_9" itemSubjectRef="ItemDefinition_453" name="spec"/>
+        <bpmn2:dataInput id="DataInput_11" itemSubjectRef="ItemDefinition_403" name="Description"/>
+        <bpmn2:dataInput id="DataInput_12" itemSubjectRef="ItemDefinition_403" name="FormName"/>
         <bpmn2:dataOutput id="DataOutput_3" itemSubjectRef="ItemDefinition_152" name="approval"/>
         <bpmn2:dataOutput id="DataOutput_4" itemSubjectRef="ItemDefinition_403" name="comment"/>
         <bpmn2:inputSet id="InputSet_1">
@@ -150,6 +170,8 @@
           <bpmn2:dataInputRefs>DataInput_7</bpmn2:dataInputRefs>
           <bpmn2:dataInputRefs>DataInput_8</bpmn2:dataInputRefs>
           <bpmn2:dataInputRefs>DataInput_9</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>DataInput_11</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>DataInput_12</bpmn2:dataInputRefs>
         </bpmn2:inputSet>
         <bpmn2:outputSet id="OutputSet_2" name="Output Set">
           <bpmn2:dataOutputRefs>DataOutput_3</bpmn2:dataOutputRefs>
@@ -178,6 +200,20 @@
         <bpmn2:assignment id="Assignment_6">
           <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="FormalExpression_13">#{resource.getSpec()}</bpmn2:from>
           <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="FormalExpression_14">DataInput_4</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="DataInputAssociation_11">
+        <bpmn2:targetRef>DataInput_11</bpmn2:targetRef>
+        <bpmn2:assignment id="Assignment_7">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="FormalExpression_18">#{\&quot;Approval task for \&quot; +resource.getSpec().getPipeline()}</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="FormalExpression_15">DataInput_11</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="DataInputAssociation_12">
+        <bpmn2:targetRef>DataInput_12</bpmn2:targetRef>
+        <bpmn2:assignment id="Assignment_8">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="FormalExpression_19">approval</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="FormalExpression_4">DataInput_12</bpmn2:to>
         </bpmn2:assignment>
       </bpmn2:dataInputAssociation>
       <bpmn2:dataOutputAssociation id="DataOutputAssociation_3">
@@ -240,17 +276,17 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_ExclusiveGateway_1" bpmnElement="ExclusiveGateway_1" isMarkerVisible="true">
         <dc:Bounds height="50.0" width="50.0" x="134.0" y="111.0"/>
-        <bpmndi:BPMNLabel>
+        <bpmndi:BPMNLabel id="BPMNLabel_8">
           <dc:Bounds height="11.0" width="59.0" x="130.0" y="161.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_ExclusiveGateway_2" bpmnElement="ExclusiveGateway_2" isMarkerVisible="true">
         <dc:Bounds height="50.0" width="50.0" x="375.0" y="105.0"/>
-        <bpmndi:BPMNLabel/>
+        <bpmndi:BPMNLabel id="BPMNLabel_9"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_UserTask_2" bpmnElement="UserTask_2" isExpanded="true">
         <dc:Bounds height="50.0" width="110.0" x="220.0" y="194.0"/>
-        <bpmndi:BPMNLabel>
+        <bpmndi:BPMNLabel id="BPMNLabel_10">
           <dc:Bounds height="11.0" width="36.0" x="257.0" y="213.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
@@ -300,26 +336,26 @@
         <di:waypoint xsi:type="dc:Point" x="110.0" y="138.0"/>
         <di:waypoint xsi:type="dc:Point" x="110.0" y="136.0"/>
         <di:waypoint xsi:type="dc:Point" x="134.0" y="136.0"/>
-        <bpmndi:BPMNLabel/>
+        <bpmndi:BPMNLabel id="BPMNLabel_13"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_5" bpmnElement="SequenceFlow_5" sourceElement="BPMNShape_ExclusiveGateway_2" targetElement="BPMNShape_ServiceTask_1">
         <di:waypoint xsi:type="dc:Point" x="425.0" y="130.0"/>
         <di:waypoint xsi:type="dc:Point" x="442.0" y="130.0"/>
         <di:waypoint xsi:type="dc:Point" x="442.0" y="133.0"/>
         <di:waypoint xsi:type="dc:Point" x="460.0" y="133.0"/>
-        <bpmndi:BPMNLabel/>
+        <bpmndi:BPMNLabel id="BPMNLabel_14"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_6" bpmnElement="SequenceFlow_6" sourceElement="BPMNShape_ExclusiveGateway_1" targetElement="BPMNShape_UserTask_2">
         <di:waypoint xsi:type="dc:Point" x="159.0" y="161.0"/>
         <di:waypoint xsi:type="dc:Point" x="159.0" y="219.0"/>
         <di:waypoint xsi:type="dc:Point" x="220.0" y="219.0"/>
-        <bpmndi:BPMNLabel/>
+        <bpmndi:BPMNLabel id="BPMNLabel_15"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_7" bpmnElement="SequenceFlow_7" sourceElement="BPMNShape_UserTask_2" targetElement="BPMNShape_ExclusiveGateway_2">
         <di:waypoint xsi:type="dc:Point" x="330.0" y="219.0"/>
         <di:waypoint xsi:type="dc:Point" x="400.0" y="219.0"/>
         <di:waypoint xsi:type="dc:Point" x="400.0" y="155.0"/>
-        <bpmndi:BPMNLabel/>
+        <bpmndi:BPMNLabel id="BPMNLabel_16"/>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

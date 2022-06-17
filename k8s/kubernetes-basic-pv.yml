@@ -5,7 +5,7 @@ metadata:
   annotations:
     app.quarkus.io/build-timestamp: 2022-02-05 - 11:22:03 +0000
   labels:
-    app.kubernetes.io/version: 0.1.0
+    app.kubernetes.io/version: 0.3.0
     app.kubernetes.io/name: automatiko-approval-task
   name: automatiko-approval-task
 ---
@@ -16,7 +16,7 @@ metadata:
     app.quarkus.io/build-timestamp: 2022-02-05 - 11:22:03 +0000
   labels:
     app.kubernetes.io/name: automatiko-approval-task
-    app.kubernetes.io/version: 0.1.0
+    app.kubernetes.io/version: 0.3.0
   name: automatiko-approval-task
 spec:
   ports:
@@ -25,7 +25,7 @@ spec:
       targetPort: 8080
   selector:
     app.kubernetes.io/name: automatiko-approval-task
-    app.kubernetes.io/version: 0.1.0
+    app.kubernetes.io/version: 0.3.0
   type: ClusterIP
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -162,21 +162,21 @@ metadata:
     app.quarkus.io/build-timestamp: 2022-02-05 - 11:22:03 +0000
   labels:
     app.kubernetes.io/name: automatiko-approval-task
-    app.kubernetes.io/version: 0.2.0
+    app.kubernetes.io/version: 0.3.0
   name: automatiko-approval-task
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: automatiko-approval-task
-      app.kubernetes.io/version: 0.2.0
+      app.kubernetes.io/version: 0.3.0
   template:
     metadata:
       annotations:
         app.quarkus.io/build-timestamp: 2022-02-05 - 11:22:03 +0000
       labels:
         app.kubernetes.io/name: automatiko-approval-task
-        app.kubernetes.io/version: 0.2.0
+        app.kubernetes.io/version: 0.3.0
     spec:
       volumes:
        - name: approvaltask-pv-storage

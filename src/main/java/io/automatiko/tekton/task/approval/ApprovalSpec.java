@@ -14,7 +14,8 @@ public class ApprovalSpec implements KubernetesResource {
 
     public enum Strategy {
         SINGLE,
-        MULTI
+        MULTI,
+        FOUR_EYES
     }
 
     private String description;

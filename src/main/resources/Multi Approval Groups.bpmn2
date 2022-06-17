@@ -99,6 +99,8 @@
           <bpmn2:dataInput id="DataInput_2" name="Exluded users"/>
           <bpmn2:dataInput id="DataInput_3" name="Groups"/>
           <bpmn2:dataInput id="DataInput_4" itemSubjectRef="ItemDefinition_453" name="spec"/>
+          <bpmn2:dataInput id="DataInput_6" itemSubjectRef="ItemDefinition_403" name="Description"/>
+          <bpmn2:dataInput id="DataInput_8" itemSubjectRef="ItemDefinition_403" name="FormName"/>
           <bpmn2:dataOutput id="DataOutput_1" itemSubjectRef="ItemDefinition_152" name="approval"/>
           <bpmn2:dataOutput id="DataOutput_2" itemSubjectRef="ItemDefinition_403" name="comment"/>
           <bpmn2:inputSet id="_InputSet_4">
@@ -106,6 +108,8 @@
             <bpmn2:dataInputRefs>DataInput_2</bpmn2:dataInputRefs>
             <bpmn2:dataInputRefs>DataInput_3</bpmn2:dataInputRefs>
             <bpmn2:dataInputRefs>DataInput_4</bpmn2:dataInputRefs>
+            <bpmn2:dataInputRefs>DataInput_6</bpmn2:dataInputRefs>
+            <bpmn2:dataInputRefs>DataInput_8</bpmn2:dataInputRefs>
           </bpmn2:inputSet>
           <bpmn2:outputSet id="OutputSet_1" name="Output Set">
             <bpmn2:dataOutputRefs>DataOutput_1</bpmn2:dataOutputRefs>
@@ -134,6 +138,20 @@
           <bpmn2:assignment id="Assignment_4">
             <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="FormalExpression_10">#{resource.getSpec()}</bpmn2:from>
             <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="FormalExpression_8">DataInput_4</bpmn2:to>
+          </bpmn2:assignment>
+        </bpmn2:dataInputAssociation>
+        <bpmn2:dataInputAssociation id="DataInputAssociation_7">
+          <bpmn2:targetRef>DataInput_6</bpmn2:targetRef>
+          <bpmn2:assignment id="Assignment_3">
+            <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="FormalExpression_9">#{\&quot;Approval task for \&quot; +resource.getSpec().getPipeline()}</bpmn2:from>
+            <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="FormalExpression_3">DataInput_6</bpmn2:to>
+          </bpmn2:assignment>
+        </bpmn2:dataInputAssociation>
+        <bpmn2:dataInputAssociation id="DataInputAssociation_8">
+          <bpmn2:targetRef>DataInput_8</bpmn2:targetRef>
+          <bpmn2:assignment id="Assignment_5">
+            <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="FormalExpression_12">approval</bpmn2:from>
+            <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="FormalExpression_6">DataInput_8</bpmn2:to>
           </bpmn2:assignment>
         </bpmn2:dataInputAssociation>
         <bpmn2:dataOutputAssociation id="DataOutputAssociation_1">

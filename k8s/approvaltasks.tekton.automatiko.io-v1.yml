@@ -21,6 +21,7 @@ spec:
                 enum:
                 - MULTI
                 - SINGLE
+                - FOUR_EYES
                 type: string
               approvers:
                 items:
