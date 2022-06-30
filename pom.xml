@@ -11,8 +11,8 @@
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
 
   <properties>
-    <quarkus.version>2.9.2.Final</quarkus.version>
-    <automatiko.version>0.0.0-SNAPSHOT</automatiko.version>
+    <quarkus.version>2.10.0.Final</quarkus.version>
+    <automatiko.version>0.17.0</automatiko.version>
     <surefire.version>2.22.1</surefire.version>
     <compiler.version>3.8.1</compiler.version>
 
@@ -60,7 +60,7 @@
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-user-tasks-email-addon</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-events-websocket-addon</artifactId>
