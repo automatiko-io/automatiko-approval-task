@@ -23,6 +23,11 @@
 						class="input100" type="text" name="name"
 						placeholder="Enter pipeline run name">
 				</div>
+				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100">
+					<span class="label-input100">Task name *</span> <input id="taskName"
+						class="input100" type="text" name="taskName"
+						placeholder="Enter task name">
+				</div>
 
 				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100">
 					<span class="label-input100">Approver </span> <input id="approver"
@@ -62,7 +67,7 @@
 	let loadTasks = function() {
 		
 		$.ajax({
-			url : '/approvals/' + $( "#pipeline" ).val() + '-approval/tasks?user=' + $( "#approver" ).val() + '&group=' + $( "#group" ).val(),
+			url : '/approvals/' + $( "#pipeline" ).val() + '-' + $( "#taskName" ).val() + '/tasks?user=' + $( "#approver" ).val() + '&group=' + $( "#group" ).val(),
 			type : 'GET',
 			dataType : 'json',
 			contentType: 'application/json',
@@ -94,6 +99,10 @@
 		$( "#submitButton" ).on( "click", function() {
 			if ($( "#pipeline" ).val() === '') {
 				alert("Please enter pipeline run name");
+				return;
+			}
+			if ($( "#taskName" ).val() === '') {
+				alert("Please enter task name");
 				return;
 			}
 			
