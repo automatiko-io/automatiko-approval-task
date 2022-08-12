@@ -256,7 +256,7 @@ public class ApprovalTaskResourceOperations {
     public void updateRunResultsCompleted(ApprovalTask resource) {
 
         Resource<Run> r = kube.resources(Run.class).inNamespace(resource.getMetadata().getNamespace())
-                .withName(resource.getMetadata().getName().replace("approval-", ""));
+                .withName(resource.getMetadata().getName());
 
         Run instance = r.fromServer().get();
         if (instance != null) {
