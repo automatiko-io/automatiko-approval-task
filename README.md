@@ -289,10 +289,58 @@ To enable email notification, approval tasks deployment must be equipped with ad
 - name: QUARKUS_MAILER_USERNAME
   value: youruser@gmail.com
 - name: QUARKUS_MAILER_PASSWORD
-  value: password        
+  value: password   
+- name: QUARKUS_PROFILE
+  value: withemail     
 ````
 
 Above properties must be set based on your email server before deployment.
+
+In case the mail server does not support TLS, the add following environment variable
+
+````
+ - name: QUARKUS_MAILER_START_TLS
+   value: DISABLED
+````
+
+###### Customize email templates
+
+In some situations users would like to constomize email that is being sent out to the approvers. It is possible to be 
+done by providing a templates of the emails via volumes mount.
+
+- Create your customised email template as an html file named `approval-email.html` 
+- Create config map with the html file from point 1
+	
+ ````
+    kubectl create configmap approval-task-templates --from-file=/path/to/templates/folder/
+ ````
+
+- Add volume and volume mount to the deployment manifest
+
+    ````
+    ...
+            volumeMounts:
+              - name: templates-volume
+                mountPath: /templates
+        
+    ...
+    
+      volumes:
+      - name: templates-volume
+        configMap:        
+          name: approval-task-templates    
+    ````
+
+- Set the path to the templates folder via environment variables in the deployment manifest
+
+    ````
+    - name: QUARKUS_AUTOMATIKO_TEMPLATES_FOLDER
+      value: "/templates"  
+    ````
+
+Deploy it and from now on it will use the customized email template.
+
+_Since version 0.4.0_
 
 #### Configure persistence
 
