@@ -6,11 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.LoggerFactory;
+
 import io.automatiko.engine.api.Functions;
 import io.automatiko.engine.api.runtime.process.ProcessContext;
 import io.automatiko.tekton.task.run.Run;
 import io.automatiko.tekton.task.run.RunStatus;
 import io.fabric8.kubernetes.api.model.Duration;
+import io.quarkus.arc.Arc;
+import io.quarkus.qute.Engine;
+import io.quarkus.qute.Template;
 
 public class ApprovalFunctions implements Functions {
 
@@ -231,5 +236,30 @@ public class ApprovalFunctions implements Functions {
         }
 
         return false;
+    }
+
+    public static String emailSubject(ApprovalTask resource) {
+
+        if (resource.getSpec().getData() == null) {
+            return "Approval task for pipeline " + resource.getSpec().getPipeline();
+        }
+
+        try {
+            Engine templateEngine = Arc.container().instance(Engine.class).get();
+
+            Template emailTemplate = templateEngine.getTemplate("APPROVAL_TASK_EMAIL_SUBJECT");
+
+            if (emailTemplate != null) {
+
+                Map<String, String> data = resource.getSpec().flatData();
+
+                return emailTemplate.instance().data(data).render();
+            }
+        } catch (Exception e) {
+            LoggerFactory.getLogger(ApprovalFunctions.class)
+                    .warn("Unable to create custom email subject, using default one. Error {}", e.getMessage());
+
+        }
+        return "Approval task for pipeline " + resource.getSpec().getPipeline();
     }
 }

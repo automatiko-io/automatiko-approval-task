@@ -1,5 +1,6 @@
 package io.automatiko.tekton.task.run;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +64,21 @@ public class RunSpec implements KubernetesResource {
         return params.stream().filter(param -> param.getOrDefault("name", "").equals(name)).map(param -> param.get("value"))
                 .findFirst()
                 .orElse(defaultValue);
+    }
+
+    public List<Map<String, String>> flatParams() {
+
+        List<Map<String, String>> filtered = new ArrayList<Map<String, String>>();
+
+        for (Map<String, Object> item : params) {
+
+            if (item.get("value") != null) {
+
+                filtered.add(Map.of(item.get("name").toString(), item.get("value").toString()));
+            }
+        }
+
+        return filtered;
     }
 
     @Override
