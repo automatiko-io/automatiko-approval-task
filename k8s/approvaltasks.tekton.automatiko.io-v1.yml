@@ -35,12 +35,6 @@ spec:
                 type: string
               description:
                 type: string
-              data:
-                items:
-                  additionalProperties:
-                    type: string
-                  type: object
-                type: array
             type: object
           status:
             properties:

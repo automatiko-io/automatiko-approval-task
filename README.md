@@ -305,10 +305,10 @@ In case the mail server does not support TLS, the add following environment vari
 
 ###### Customize email templates
 
-In some situations users would like to constomize email that is being sent out to the approvers. It is possible to be 
+In some situations users would like to customize email that is being sent out to the approvers. It is possible to be 
 done by providing a templates of the emails via volumes mount.
 
-- Create your customised email template as an html file named `approval-email.html` 
+- Create your customized email template as an html file named `approval-email.html` 
 - Create config map with the html file from point 1
 	
  ````
@@ -340,32 +340,6 @@ done by providing a templates of the emails via volumes mount.
 
 Deploy it and from now on it will use the customized email template.
 
-In addition, email subject can also be customized by specifying the template via environment variable
-
-    ````
-	- name: APPROVAL_TASK_EMAIL_SUBJECT
-      value: "Here is an approval for {pipeline} waiting to be deployed to {environment}" 
-    ````
-Where values inside `{}` are references to parameters specified in your pipeline task
-
-````
-  tasks:
-    - name: deploy-approval-task
-      taskRef:
-        apiVersion: tekton.automatiko.io/v1alpha1
-        kind: ApprovalTask
-        name: approvaltask
-      params:
-        - name: pipeline
-          value: "$(context.pipelineRun.name)"
-        - name: description
-          value: "Approval from pipeline $(context.pipeline.name)"
-        - name: approvers
-          value:
-            - "john@email.com"
-        - name: environment
-          value: "staging"
-````
 
 _Since version 0.4.0_
 

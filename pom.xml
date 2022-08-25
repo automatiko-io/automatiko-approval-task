@@ -12,7 +12,7 @@
 
   <properties>
     <quarkus.version>2.11.1.Final</quarkus.version>
-    <automatiko.version>0.0.0-SNAPSHOT</automatiko.version>
+    <automatiko.version>0.18.0</automatiko.version>
     <surefire.version>2.22.1</surefire.version>
     <compiler.version>3.8.1</compiler.version>
 

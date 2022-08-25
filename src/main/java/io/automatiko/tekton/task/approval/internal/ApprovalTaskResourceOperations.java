@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -25,8 +24,6 @@ import io.automatiko.tekton.task.run.RunSpec;
 import io.automatiko.tekton.task.run.RunStatus;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.Resource;
-import io.quarkus.qute.Engine;
-import io.quarkus.qute.Template;
 
 @ApplicationScoped
 public class ApprovalTaskResourceOperations {
@@ -35,22 +32,6 @@ public class ApprovalTaskResourceOperations {
 
     @Inject
     KubernetesClient kube;
-
-    @Inject
-    Engine templateEngine;
-
-    @PostConstruct
-    public void importCustomEmailTemplate() {
-
-        String template = System.getenv("APPROVAL_TASK_EMAIL_SUBJECT");
-
-        if (template != null) {
-            Template emailTemplate = templateEngine.parse(template);
-
-            templateEngine.putTemplate("APPROVAL_TASK_EMAIL_SUBJECT", emailTemplate);
-            LOGGER.info("Imported template for custom email subject '{}'", template);
-        }
-    }
 
     @SuppressWarnings("unchecked")
     public boolean createApprovalTask(Run runResource) {
@@ -77,8 +58,6 @@ public class ApprovalTaskResourceOperations {
                 // ignore invalid strategies and fallback to use single
                 LOGGER.warn("Invalid strategy set '{}', fallback to SINGLE", strategy);
             }
-
-            spec.setData(runSpec.flatParams());
 
             ApprovalTask item = new ApprovalTask();
             item.getMetadata().setName(runResource.getMetadata().getName());
