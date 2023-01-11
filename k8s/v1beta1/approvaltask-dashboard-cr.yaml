@@ -1,0 +1,8 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: tekton-dashboard-approvaltasks-extension
+rules:
+  - apiGroups: ["tekton.automatiko.io"]
+    resources: ["approvaltasks"]
+    verbs: ["get", "list", "watch"]

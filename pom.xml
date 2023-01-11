@@ -5,19 +5,19 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.automatiko.tekton</groupId>
   <artifactId>automatiko-approval-task</artifactId>
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <name>Automatiko Tekton Approval Task</name>
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
 
   <properties>
-    <quarkus.version>2.12.2.Final</quarkus.version>
-    <automatiko.version>0.19.0</automatiko.version>
+    <quarkus.version>2.15.1.Final</quarkus.version>
+    <automatiko.version>0.21.0</automatiko.version>
     <surefire.version>2.22.1</surefire.version>
     <compiler.version>3.8.1</compiler.version>
 
-    <maven.compiler.target>11</maven.compiler.target>
-    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -35,6 +35,12 @@
   </dependencyManagement>
 
   <dependencies>
+  
+  <dependency>
+    <groupId>io.javaoperatorsdk</groupId>
+    <artifactId>operator-framework-core</artifactId>
+    <version>4.2.1</version>
+  </dependency>
     <dependency>
       <groupId>io.automatiko.quarkus</groupId>
       <artifactId>automatiko-operator</artifactId>

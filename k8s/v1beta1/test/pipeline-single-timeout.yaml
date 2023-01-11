@@ -6,8 +6,9 @@ metadata:
 spec:
   tasks:
     - name: approval
+      timeout: 2m
       taskRef:
-        apiVersion: tekton.automatiko.io/v1alpha1
+        apiVersion: tekton.automatiko.io/v1beta1
         kind: ApprovalTask
         name: approvaltask
       params:
@@ -45,4 +46,4 @@ spec:
         - name: decision
           value: "REJECTED"
         - name: comment
-          value: $(tasks.approval.results.comment)          
+          value: $(tasks.approval.results.comment)

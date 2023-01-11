@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: print-decision
+spec:
+  params:
+    - name: decision
+      type: string
+    - name: comment
+      type: string
+  steps:
+    - name: print
+      image: ubuntu
+      command:
+        - echo
+      args:
+        - "Approval done $(params.decision) with comment $(params.comment)"

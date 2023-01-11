@@ -19,9 +19,9 @@ import io.automatiko.tekton.task.approval.ApprovalSpec;
 import io.automatiko.tekton.task.approval.ApprovalSpec.Strategy;
 import io.automatiko.tekton.task.approval.ApprovalStatus;
 import io.automatiko.tekton.task.approval.ApprovalTask;
-import io.automatiko.tekton.task.run.Run;
-import io.automatiko.tekton.task.run.RunSpec;
-import io.automatiko.tekton.task.run.RunStatus;
+import io.automatiko.tekton.task.run.CustomRun;
+import io.automatiko.tekton.task.run.CustomRunSpec;
+import io.automatiko.tekton.task.run.CustomRunStatus;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.Resource;
 
@@ -34,14 +34,14 @@ public class ApprovalTaskResourceOperations {
     KubernetesClient kube;
 
     @SuppressWarnings("unchecked")
-    public boolean createApprovalTask(Run runResource) {
+    public boolean createApprovalTask(CustomRun runResource) {
 
         Resource<ApprovalTask> r = kube.resources(ApprovalTask.class).inNamespace(runResource.getMetadata().getNamespace())
                 .withName(runResource.getMetadata().getName());
 
         if (r.fromServer().get() == null) {
 
-            RunSpec runSpec = runResource.getSpec();
+            CustomRunSpec runSpec = runResource.getSpec();
 
             ApprovalSpec spec = new ApprovalSpec();
 
@@ -87,7 +87,7 @@ public class ApprovalTaskResourceOperations {
         return true;
     }
 
-    public boolean onUpdate(Run runResource, boolean skipResourceUpdate) {
+    public boolean onUpdate(CustomRun runResource, boolean skipResourceUpdate) {
 
         String currentStatus = runResource.getSpec().getStatus();
         if (currentStatus == null) {
@@ -95,7 +95,7 @@ public class ApprovalTaskResourceOperations {
         }
 
         if ("RunCancelled".equalsIgnoreCase(currentStatus)) {
-            RunStatus status = runResource.getStatus();
+            CustomRunStatus status = runResource.getStatus();
             List<Map<String, Object>> conditions = status.getConditions();
 
             if (conditions == null) {
@@ -130,7 +130,7 @@ public class ApprovalTaskResourceOperations {
         return skipResourceUpdate;
     }
 
-    public void onTimeout(Run runResource) {
+    public void onTimeout(CustomRun runResource) {
 
         Resource<ApprovalTask> r = kube.resources(ApprovalTask.class).inNamespace(runResource.getMetadata().getNamespace())
                 .withName(runResource.getMetadata().getName());
@@ -143,13 +143,13 @@ public class ApprovalTaskResourceOperations {
 
             LOGGER.info("Approval task has been deleted {}", runResource.getStatus());
 
-            Resource<Run> rr = kube.resources(Run.class).inNamespace(runResource.getMetadata().getNamespace())
+            Resource<CustomRun> rr = kube.resources(CustomRun.class).inNamespace(runResource.getMetadata().getNamespace())
                     .withName(runResource.getMetadata().getName());
 
-            Run instance = rr.fromServer().get();
+            CustomRun instance = rr.fromServer().get();
             if (instance != null) {
 
-                RunStatus status = instance.getStatus();
+                CustomRunStatus status = instance.getStatus();
                 List<Map<String, Object>> conditions = status.getConditions();
 
                 if (conditions == null) {
@@ -174,7 +174,7 @@ public class ApprovalTaskResourceOperations {
         }
     }
 
-    public void onDelete(Run runResource) {
+    public void onDelete(CustomRun runResource) {
 
         Resource<ApprovalTask> r = kube.resources(ApprovalTask.class).inNamespace(runResource.getMetadata().getNamespace())
                 .withName(runResource.getMetadata().getName());
@@ -255,12 +255,12 @@ public class ApprovalTaskResourceOperations {
 
     public void updateRunResultsCompleted(ApprovalTask resource) {
 
-        Resource<Run> r = kube.resources(Run.class).inNamespace(resource.getMetadata().getNamespace())
+        Resource<CustomRun> r = kube.resources(CustomRun.class).inNamespace(resource.getMetadata().getNamespace())
                 .withName(resource.getMetadata().getName());
 
-        Run instance = r.fromServer().get();
+        CustomRun instance = r.fromServer().get();
         if (instance != null) {
-            RunStatus status = instance.getStatus() == null ? new RunStatus() : instance.getStatus();
+            CustomRunStatus status = instance.getStatus() == null ? new CustomRunStatus() : instance.getStatus();
 
             List<Map<String, Object>> results = new ArrayList<>();
             Map<String, Object> decision = new HashMap<>();
@@ -309,9 +309,9 @@ public class ApprovalTaskResourceOperations {
         }
     }
 
-    public void updateRunStatusCreated(Run resource) {
+    public void updateRunStatusCreated(CustomRun resource) {
 
-        RunStatus status = resource.getStatus() == null ? new RunStatus() : resource.getStatus();
+        CustomRunStatus status = resource.getStatus() == null ? new CustomRunStatus() : resource.getStatus();
 
         List<Map<String, Object>> conditions = status.getConditions();
 
@@ -333,9 +333,9 @@ public class ApprovalTaskResourceOperations {
         resource.setStatus(status);
     }
 
-    public void updateRunStatusFailed(Run resource) {
+    public void updateRunStatusFailed(CustomRun resource) {
 
-        RunStatus status = resource.getStatus() == null ? new RunStatus() : resource.getStatus();
+        CustomRunStatus status = resource.getStatus() == null ? new CustomRunStatus() : resource.getStatus();
 
         List<Map<String, Object>> conditions = status.getConditions();
 
@@ -357,12 +357,12 @@ public class ApprovalTaskResourceOperations {
         resource.setStatus(status);
     }
 
-    public boolean updateRunStatusCompleted(Run resource) {
+    public boolean updateRunStatusCompleted(CustomRun resource) {
 
-        Resource<Run> r = kube.resources(Run.class).inNamespace(resource.getMetadata().getNamespace())
+        Resource<CustomRun> r = kube.resources(CustomRun.class).inNamespace(resource.getMetadata().getNamespace())
                 .withName(resource.getMetadata().getName());
 
-        RunStatus status = resource.getStatus() == null ? new RunStatus() : resource.getStatus();
+        CustomRunStatus status = resource.getStatus() == null ? new CustomRunStatus() : resource.getStatus();
 
         List<Map<String, Object>> conditions = status.getConditions();
 
@@ -381,6 +381,7 @@ public class ApprovalTaskResourceOperations {
         initial.put("lastTransitionTime",
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")));
         conditions.add(initial);
+        resource.setStatus(status);
 
         r.patchStatus(resource);
 

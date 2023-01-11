@@ -12,7 +12,7 @@ import io.fabric8.kubernetes.api.model.KubernetesResource;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = JsonDeserializer.None.class)
-public class RunSpec implements KubernetesResource {
+public class CustomRunSpec implements KubernetesResource {
 
     private static final long serialVersionUID = -1775061327392758141L;
     private List<Map<String, Object>> params;
@@ -21,14 +21,14 @@ public class RunSpec implements KubernetesResource {
 
     private String status;
 
-    private Ref ref;
+    private CustomRef customRef;
 
-    public Ref getRef() {
-        return ref;
+    public CustomRef getCustomRef() {
+        return customRef;
     }
 
-    public void setRef(Ref ref) {
-        this.ref = ref;
+    public void setCustomRef(CustomRef ref) {
+        this.customRef = ref;
     }
 
     public List<Map<String, Object>> getParams() {
@@ -83,6 +83,6 @@ public class RunSpec implements KubernetesResource {
 
     @Override
     public String toString() {
-        return "RunSpec [params=" + params + ", timeout=" + timeout + ", status=" + status + ", ref=" + ref + "]";
+        return "RunSpec [params=" + params + ", timeout=" + timeout + ", status=" + status + ", ref=" + customRef + "]";
     }
 }

@@ -1,0 +1,48 @@
+
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: testpipeline2
+spec:
+  tasks:
+    - name: deploy-dev-approval-task
+      taskRef:
+        apiVersion: tekton.automatiko.io/v1beta1
+        kind: ApprovalTask
+        name: approvaltask
+      params:
+        - name: pipeline
+          value: "$(context.pipelineRun.name)"
+        - name: description
+          value: "Approval from pipeline $(context.pipeline.name) for development environment"
+        - name: approvers
+          value:
+            - "john@email.com"
+    - name: deploy-dev-approved-task
+      when:
+        - input: $(tasks.deploy-dev-approval-task.results.decision)
+          operator: in
+          values: [ "true" ]
+      taskRef:
+        name: print-decision
+      runAfter:
+        - deploy-dev-approval-task
+      params:
+        - name: decision
+          value: "APPROVED"
+        - name: comment
+          value: $(tasks.deploy-dev-approval-task.results.comment)
+    - name: deploy-dev-rejected-task
+      when:
+        - input: $(tasks.deploy-dev-approval-task.results.decision)
+          operator: in
+          values: [ "false" ]
+      taskRef:
+        name: print-decision
+      runAfter:
+        - deploy-dev-approval-task
+      params:
+        - name: decision
+          value: "REJECTED"
+        - name: comment
+          value: $(tasks.deploy-dev-approval-task.results.comment)

@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Run
+metadata:
+  generateName: run-
+spec:
+  ref:
+    apiVersion: tekton.automatiko.io/v1beta1
+    kind: ApprovalTask
+    name: approval-task   
+  params:
+    - name: description
+      value: i'm number one
+    - name: pipeline
+      value: test    

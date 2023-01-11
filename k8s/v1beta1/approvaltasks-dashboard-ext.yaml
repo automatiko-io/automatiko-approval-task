@@ -1,0 +1,9 @@
+apiVersion: dashboard.tekton.dev/v1alpha1
+kind: Extension
+metadata:
+  name: approvaltasks
+spec:
+  apiVersion: tekton.automatiko.io/v1beta1
+  name: approvaltasks
+  displayname: Approval Tasks
+  namespaced: true

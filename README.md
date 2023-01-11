@@ -1,7 +1,20 @@
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/automatiko-io/automatiko-approval-task)
+
 # Automatiko Approval Tasks for Tekton
 
 Automatiko Approval Tasks is an implementation for [Tekton](https://tekton.dev) that allows to pause the execution 
-of the pipeline run and wait for approval by human actors. It is an implementation based on [custom tasks](https://tekton.dev/docs/pipelines/runs/) of Tekton that is currently in *v1alpha1* stage which is considered not stable.
+of the pipeline run and wait for approval by human actors. It is an implementation based on [custom tasks](https://tekton.dev/docs/pipelines/runs/) of Tekton that is currently in *v1beta1* stage which is considered not stable.
+
+## Versions
+
+Automatiko Approval Tasks has two versions
+
+- `v1alpha1` that is up to `0.5.0` release and supports tekton custom tasks in `v1alpha1.Run` version
+- `v1beta1` that is from `0.6.0` release and supports tekton custom tasks in `v1beta1.CustomRun` version
+
+It is recommended to use `v1beta1.CustomRun` and 0.6.0 (or newer) release whenever possible. All below documentation references `v1beta1` version. To see readme for `v1alpha1` go [here](https://github.com/automatiko-io/automatiko-approval-task/tree/v0.5.0)
+
+<img src="https://img.shields.io/badge/Tekton%20CustomRun.v1beta1-Automatiko%20Approval%20Task%200.6.0-blue"/> <img src="https://img.shields.io/badge/Tekton%20Run.v1alpha1-Automatiko%20Approval%20Task%200.5.0-orange"/>
 
 ## Blogs and videos
 
@@ -31,7 +44,7 @@ spec:
   tasks:
     - name: approval
       taskRef:
-        apiVersion: tekton.automatiko.io/v1alpha1
+        apiVersion: tekton.automatiko.io/v1beta1
         kind: ApprovalTask
         name: approvaltask
       params:
@@ -76,7 +89,7 @@ where the first task of the pipeline is to wait for approval from a single appro
 
 Approval task is identified with following
 
-- **apiVersion: tekton.automatiko.io/v1alpha1**
+- **apiVersion: tekton.automatiko.io/v1beta1**
 - **kind: ApprovalTask**
 - **name: approvaltask**
 
@@ -143,7 +156,7 @@ To make use of it, email server must be configured as part of the deployment and
   tasks:
     - name: approval
       taskRef:
-        apiVersion: tekton.automatiko.io/v1alpha1
+        apiVersion: tekton.automatiko.io/v1beta1
         kind: ApprovalTask
         name: approvaltask
       params:
@@ -225,7 +238,10 @@ To be able to use Tekton with Approval Tasks you need to enable use of custom ta
 kubectl edit cm feature-flags -n tekton-pipelines
 ````
 
-In there find the line for `enable-custom-tasks` and check its value to `true`
+In there find the line for `custom-task-version` and check its value to `v1beta1`
+
+Depending on the version of tekton you use this flag might already be set to `v1beta1`, for details see 
+[custom tasks migration docs](https://github.com/tektoncd/pipeline/blob/main/docs/migrating-v1alpha1.Run-to-v1beta1.CustomRun.md#new-feature-flag-custom-task-version-for-migration)
 
 
 ### Install Approval Tasks CRD
@@ -235,7 +251,7 @@ NOTE: All scripts for Approval Tasks can be found in `k8s` directory of this rep
 First step is to create CRD of Approval Tasks
 
 ````
-kubectl apply -f k8s/approvaltasks.tekton.automatiko.io-v1.yml
+kubectl apply -f k8s/v1beta1/approvaltasks.tekton.automatiko.io-v1.yml
 ````
 
 ### Install Approval Task Tekton Dashboard extension
@@ -244,9 +260,9 @@ kubectl apply -f k8s/approvaltasks.tekton.automatiko.io-v1.yml
 To be able to see Approval Tasks in Tekton Dashbord there is a need to create extension and cluster role and cluster role binding for it to allow Tekton Dashboard read and watch approval tasks objects.
 
 ````
-kubectl apply -f k8s/approvaltasks-dashboard-ext.yaml
-kubectl apply -f k8s/approvaltask-dashboard-cr.yaml
-kubectl apply -f k8s/approvaltasks-dashboard-crb.yaml
+kubectl apply -f k8s/v1beta1/approvaltasks-dashboard-ext.yaml
+kubectl apply -f k8s/v1beta1/approvaltask-dashboard-cr.yaml
+kubectl apply -f k8s/v1beta1/approvaltasks-dashboard-crb.yaml
 ````
 
 ### Install approval tasks
@@ -266,13 +282,13 @@ NOTE: It comes with default values for service URL and namespaces to watch. Plea
 Change them accordingly to your environment needs.
 
 ````
-kubectl apply -f k8s/kubernetes-basic.yml
+kubectl apply -f k8s/v1beta1/kubernetes-basic.yml
 ````
 
 If you want to use approval tasks with email notifications configure email server and use 
 
 ````
-kubectl apply -f k8s/kubernetes-email.yml
+kubectl apply -f k8s/v1beta1/kubernetes-email.yml
 ````
 
 #### Configure email server
@@ -398,7 +414,7 @@ and set additional environment variables to instruct it where data should be sto
 
 This will configure all the persistent data to be stored in external storage.
 
-A complete example can be found in [k8s/kubernetes-basic-pv.yml](k8s/kubernetes-basic-pv.yml)
+A complete example can be found in [k8s/v1beta1/kubernetes-basic-pv.yml](k8s/v1beta1/kubernetes-basic-pv.yml)
 
 #### Ingress
 
@@ -504,15 +520,15 @@ spec:
 This will then go via oauth proxy container before the approval task is accessed ensuring that all traffic to the application
 is secured.
 
-A complete example can be found in [k8s/kubernetes-oauth.yml](k8s/kubernetes-oauth.yml)
+A complete example can be found in [k8s/v1beta1/kubernetes-oauth.yml](k8s/v1beta1/kubernetes-oauth.yml)
 
 # Use it
 
 Once a instance is complete you can deploy the task and pipeline to get the first approval task from Tekton pipeline.
 
 ````
-kubectl apply -f k8s/test/print.yaml
-kubectl apply -f k8s/test/pipeline-single.yaml
+kubectl apply -f k8s/v1beta1/test/print.yaml
+kubectl apply -f k8s/v1beta1/test/pipeline-single.yaml
 ````
 
 Then head to Tekton Dashboard where you should see something like this

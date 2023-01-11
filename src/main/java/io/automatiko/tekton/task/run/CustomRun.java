@@ -6,19 +6,19 @@ import io.fabric8.kubernetes.model.annotation.Group;
 import io.fabric8.kubernetes.model.annotation.Version;
 
 @Group("tekton.dev")
-@Version("v1alpha1")
-public class Run extends CustomResource<RunSpec, RunStatus> implements Namespaced {
+@Version("v1beta1")
+public class CustomRun extends CustomResource<CustomRunSpec, CustomRunStatus> implements Namespaced {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected RunSpec initSpec() {
-        return new RunSpec();
+    protected CustomRunSpec initSpec() {
+        return new CustomRunSpec();
     }
 
     @Override
-    protected RunStatus initStatus() {
-        return new RunStatus();
+    protected CustomRunStatus initStatus() {
+        return new CustomRunStatus();
     }
 
 }

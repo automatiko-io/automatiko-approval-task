@@ -1,0 +1,48 @@
+
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: testpipeline-group
+spec:
+  tasks:
+    - name: approval
+      taskRef:
+        apiVersion: tekton.automatiko.io/v1beta1
+        kind: ApprovalTask
+        name: approvaltask
+      params:
+        - name: pipeline
+          value: "$(context.pipelineRun.name)"
+        - name: description
+          value: "Sample approval from pipeline $(context.pipeline.name)"
+        - name: groups
+          value:
+            - "admin"
+    - name: approved
+      when:
+        - input: $(tasks.approval.results.decision)
+          operator: in
+          values: [ "true" ]
+      taskRef:
+        name: print-decision
+      runAfter:
+        - approval
+      params:
+        - name: decision
+          value: "APPROVED"
+        - name: comment
+          value: $(tasks.approval.results.comment)
+    - name: rejected
+      when:
+        - input: $(tasks.approval.results.decision)
+          operator: in
+          values: [ "false" ]
+      taskRef:
+        name: print-decision
+      runAfter:
+        - approval
+      params:
+        - name: decision
+          value: "REJECTED"
+        - name: comment
+          value: $(tasks.approval.results.comment)          

@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 import io.automatiko.engine.api.Functions;
 import io.automatiko.engine.api.runtime.process.ProcessContext;
-import io.automatiko.tekton.task.run.Run;
-import io.automatiko.tekton.task.run.RunStatus;
+import io.automatiko.tekton.task.run.CustomRun;
+import io.automatiko.tekton.task.run.CustomRunStatus;
 import io.fabric8.kubernetes.api.model.Duration;
 
 public class ApprovalFunctions implements Functions {
@@ -38,10 +38,10 @@ public class ApprovalFunctions implements Functions {
         return false;
     }
 
-    public static boolean hasApprovalTaskRef(Run eventData) {
+    public static boolean hasApprovalTaskRef(CustomRun eventData) {
         if (eventData.getSpec() != null) {
-            String apiVersion = (String) eventData.getSpec().getRef().getApiVersion();
-            String kind = (String) eventData.getSpec().getRef().getKind();
+            String apiVersion = (String) eventData.getSpec().getCustomRef().getApiVersion();
+            String kind = (String) eventData.getSpec().getCustomRef().getKind();
 
             if (ApprovalTask.API_VERSION.equalsIgnoreCase(apiVersion) && ApprovalTask.KIND.equalsIgnoreCase(kind)) {
                 return true;
@@ -52,7 +52,7 @@ public class ApprovalFunctions implements Functions {
     }
 
     @SuppressWarnings("rawtypes")
-    public static boolean hasStatusSet(Run resource) {
+    public static boolean hasStatusSet(CustomRun resource) {
         if (resource.getStatus() == null) {
             return false;
         }
@@ -74,7 +74,7 @@ public class ApprovalFunctions implements Functions {
         return false;
     }
 
-    public static boolean hasResults(Run resource) {
+    public static boolean hasResults(CustomRun resource) {
         if (resource.getStatus() == null) {
             return false;
         }
@@ -86,12 +86,12 @@ public class ApprovalFunctions implements Functions {
         return resource.getStatus().getResults().size() > 0;
     }
 
-    public static boolean isCompleted(Run resource) {
+    public static boolean isCompleted(CustomRun resource) {
         if (resource.getStatus() == null) {
             return false;
         }
 
-        RunStatus status = resource.getStatus();
+        CustomRunStatus status = resource.getStatus();
 
         List<Map<String, Object>> conditions = status.getConditions();
 
@@ -134,15 +134,15 @@ public class ApprovalFunctions implements Functions {
         return resource.getStatus().getResults().getDecision() != null;
     }
 
-    public static String approvalTaskTag(Run resource) {
+    public static String approvalTaskTag(CustomRun resource) {
         return resource.getMetadata().getName();
     }
 
-    public static String pipelineTag(Run resource) {
+    public static String pipelineTag(CustomRun resource) {
         return (String) resource.getSpec().findParam("pipeline", "not set");
     }
 
-    public static String runInstanceDescription(Run resource) {
+    public static String runInstanceDescription(CustomRun resource) {
         return "Approval requested for '" + pipelineTag(resource) + "'";
     }
 
@@ -208,7 +208,7 @@ public class ApprovalFunctions implements Functions {
         context.setVariable("approved", decision);
     }
 
-    public static String kubeDurationToIso(Run run) {
+    public static String kubeDurationToIso(CustomRun run) {
         try {
             Duration duration = Duration.parse(run.getSpec().getTimeout());
             return duration.getDuration().toString();
@@ -217,7 +217,7 @@ public class ApprovalFunctions implements Functions {
         }
     }
 
-    public static boolean hasTimer(Run resource) {
+    public static boolean hasTimer(CustomRun resource) {
         if (resource.getSpec().getTimeout() != null && !resource.getSpec().getTimeout().isEmpty()) {
             return true;
         }

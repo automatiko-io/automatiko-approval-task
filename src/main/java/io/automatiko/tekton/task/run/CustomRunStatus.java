@@ -11,7 +11,7 @@ import io.fabric8.kubernetes.api.model.KubernetesResource;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = JsonDeserializer.None.class)
-public class RunStatus implements KubernetesResource {
+public class CustomRunStatus implements KubernetesResource {
 
     private static final long serialVersionUID = 3828912059892165442L;
 

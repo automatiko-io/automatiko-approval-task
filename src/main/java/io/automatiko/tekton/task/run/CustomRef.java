@@ -1,6 +1,6 @@
 package io.automatiko.tekton.task.run;
 
-public class Ref {
+public class CustomRef {
 
     private String apiVersion;
 

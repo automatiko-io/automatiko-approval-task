@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- origin at X=0.0 Y=0.0 -->
 <bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:automatiko="https://automatiko.io" xmlns="https://automatiko.io" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://www.java.com/javaTypes" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd https://automatiko.io automatiko.xsd" id="Definition" exporter="org.eclipse.bpmn2.modeler.core" exporterVersion="2.0.0" expressionLanguage="http://www.mvel.org/2.0" targetNamespace="https://automatiko.io" typeLanguage="http://www.java.com/javaTypes">
-  <bpmn2:itemDefinition id="ItemDefinition_101" isCollection="false" structureRef="io.automatiko.tekton.task.run.Run"/>
+  <bpmn2:itemDefinition id="ItemDefinition_101" isCollection="false" structureRef="io.automatiko.tekton.task.run.CustomRun"/>
   <bpmn2:itemDefinition id="ItemDefinition_923" isCollection="false" structureRef="io.automatiko.tekton.task.approval.internal.ApprovalTaskResourceOperations"/>
   <bpmn2:itemDefinition id="ItemDefinition_925" isCollection="false" structureRef="io.automatiko.engine.quarkus.operator.ops.CustomResourceOperations"/>
   <bpmn2:itemDefinition id="ItemDefinition_1366" isCollection="false" structureRef="io.automatiko.tekton.task.approval.ApprovalTask"/>
@@ -33,7 +33,7 @@
   <bpmn2:process id="runs" automatiko:packageName="io.automatiko.tekton.task.run" name="RunController" isExecutable="true" processType="Public">
     <bpmn2:documentation id="Documentation_1"><![CDATA[Controller for integration with Tekton Custom Tasks (represented as Run)]]></bpmn2:documentation>
     <bpmn2:extensionElements>
-      <automatiko:import name="io.automatiko.tekton.task.run.Run"/>
+      <automatiko:import name="io.automatiko.tekton.task.run.CustomRun"/>
       <automatiko:import name="io.automatiko.tekton.task.approval.internal.ApprovalTaskResourceOperations"/>
       <automatiko:import name="io.automatiko.engine.quarkus.operator.ops.CustomResourceOperations"/>
       <automatiko:import name="io.automatiko.tekton.task.approval.ApprovalTask"/>

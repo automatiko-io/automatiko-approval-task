@@ -7,7 +7,7 @@ metadata:
     app.quarkus.io/build-timestamp: 2022-06-10 - 10:47:05 +0000
   labels:
     app.kubernetes.io/name: automatiko-approval-task
-    app.kubernetes.io/version: 0.3.0
+    app.kubernetes.io/version: 0.6.0
   name: automatiko-approval-task
 ---
 apiVersion: v1
@@ -18,7 +18,7 @@ metadata:
     app.quarkus.io/build-timestamp: 2022-06-10 - 10:47:05 +0000
   labels:
     app.kubernetes.io/name: automatiko-approval-task
-    app.kubernetes.io/version: 0.3.0
+    app.kubernetes.io/version: 0.6.0
   name: automatiko-approval-task
 spec:
   ports:
@@ -27,7 +27,7 @@ spec:
       targetPort: 8080
   selector:
     app.kubernetes.io/name: automatiko-approval-task
-    app.kubernetes.io/version: 0.3.0
+    app.kubernetes.io/version: 0.6.0
   type: ClusterIP
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -79,14 +79,14 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: runs-cluster-role
+  name: customruns-cluster-role
 rules:
   - apiGroups:
       - tekton.dev
     resources:
-      - runs
-      - runs/status
-      - runs/finalizers
+      - customruns
+      - customruns/status
+      - customruns/finalizers
     verbs:
       - get
       - list
@@ -154,14 +154,14 @@ metadata:
     app.quarkus.io/build-timestamp: 2022-06-10 - 10:47:05 +0000
   labels:
     app.kubernetes.io/name: automatiko-approval-task
-    app.kubernetes.io/version: 0.3.0
+    app.kubernetes.io/version: 0.6.0
   name: automatiko-approval-task
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: automatiko-approval-task
-      app.kubernetes.io/version: 0.3.0
+      app.kubernetes.io/version: 0.6.0
   template:
     metadata:
       annotations:
@@ -169,7 +169,7 @@ spec:
         app.quarkus.io/build-timestamp: 2022-06-10 - 10:47:05 +0000
       labels:
         app.kubernetes.io/name: automatiko-approval-task
-        app.kubernetes.io/version: 0.3.0
+        app.kubernetes.io/version: 0.6.0
     spec:
       containers:
         - env:
@@ -180,8 +180,24 @@ spec:
             - name: QUARKUS_OPERATOR_SDK_NAMESPACES
               value: default
             - name: QUARKUS_AUTOMATIKO_SERVICE_URL
-              value: http://localhost:9000                    
-          image: automatiko/automatiko-approval-task:0.3.0
+              value: http://localhost:9000
+            - name: QUARKUS_MAILER_MOCK
+              value: "true"
+            - name: QUARKUS_PROFILE
+              value: withemail
+            - name: QUARKUS_MAILER_FROM
+              value: youruser@gmail.com
+            - name: QUARKUS_MAILER_HOST
+              value: smtp.gmail.com              
+            - name: QUARKUS_MAILER_PORT
+              value: "587"
+            - name: QUARKUS_MAILER_USERNAME
+              value: youruser@gmail.com
+            - name: QUARKUS_MAILER_PASSWORD
+              value: password                              
+            - name: QUARKUS_AUTOMATIKO_ON_INSTANCE_END
+              value: "keep" 
+          image: automatiko/automatiko-approval-task:0.6.0
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
