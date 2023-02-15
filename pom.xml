@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.automatiko.tekton</groupId>
   <artifactId>automatiko-approval-task</artifactId>
-  <version>0.6.0</version>
+  <version>0.6.1</version>
 
   <name>Automatiko Tekton Approval Task</name>
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
@@ -174,7 +174,7 @@
       </build>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
-        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime, --allow-incomplete-classpath</quarkus.native.additional-build-args>
+        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime, -H:-UseContainerSupport</quarkus.native.additional-build-args>
       </properties>
     </profile>
     <profile>
@@ -232,7 +232,7 @@
       </build>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
-        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime, --allow-incomplete-classpath</quarkus.native.additional-build-args>
+        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime, -H:-UseContainerSupport</quarkus.native.additional-build-args>
         <quarkus.native.container-build>true</quarkus.native.container-build>
         <quarkus.container-image.build>true</quarkus.container-image.build>
         <quarkus.container-image.insecure>true</quarkus.container-image.insecure>
@@ -279,7 +279,7 @@
       </dependencies>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
-        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime, --allow-incomplete-classpath</quarkus.native.additional-build-args>
+        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime, -H:-UseContainerSupport</quarkus.native.additional-build-args>
         <quarkus.native.container-build>true</quarkus.native.container-build>
         <quarkus.container-image.build>true</quarkus.container-image.build>
         <quarkus.kubernetes.image-pull-policy>IfNotPresent</quarkus.kubernetes.image-pull-policy>
