@@ -5,14 +5,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.automatiko.tekton</groupId>
   <artifactId>automatiko-approval-task</artifactId>
-  <version>0.6.1</version>
+  <version>0.7.0</version>
 
   <name>Automatiko Tekton Approval Task</name>
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
 
   <properties>
-    <quarkus.version>2.15.1.Final</quarkus.version>
-    <automatiko.version>0.21.0</automatiko.version>
+    <quarkus.version>2.16.2.Final</quarkus.version>
+    <automatiko.version>0.23.0</automatiko.version>
     <surefire.version>2.22.1</surefire.version>
     <compiler.version>3.8.1</compiler.version>
 
@@ -35,12 +35,6 @@
   </dependencyManagement>
 
   <dependencies>
-  
-  <dependency>
-    <groupId>io.javaoperatorsdk</groupId>
-    <artifactId>operator-framework-core</artifactId>
-    <version>4.2.1</version>
-  </dependency>
     <dependency>
       <groupId>io.automatiko.quarkus</groupId>
       <artifactId>automatiko-operator</artifactId>
@@ -66,6 +60,16 @@
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-user-tasks-email-addon</artifactId>
     </dependency>
+    
+    <dependency>
+      <groupId>io.automatiko.addons</groupId>
+      <artifactId>automatiko-user-tasks-slack-addon</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>io.automatiko.addons</groupId>
+      <artifactId>automatiko-user-tasks-teams-addon</artifactId>
+    </dependency>    
 
     <dependency>
       <groupId>io.automatiko.addons</groupId>

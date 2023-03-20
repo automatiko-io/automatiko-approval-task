@@ -50,6 +50,10 @@ public class ApprovalTaskResourceOperations {
                     (String) runSpec.findParam("pipeline", runResource.getMetadata().getName()));
             spec.setApprovers((List<String>) runSpec.findParam("approvers", Collections.emptyList()));
             spec.setGroups((List<String>) runSpec.findParam("groups", Collections.emptyList()));
+
+            spec.setNotifyOnSlack((String) runSpec.findParam("notifyOnSlack", null));
+            spec.setNotifyOnTeams((String) runSpec.findParam("notifyOnTeams", null));
+
             String strategy = (String) runSpec.findParam("strategy", "SINGLE");
             try {
 

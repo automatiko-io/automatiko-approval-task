@@ -149,6 +149,14 @@ An example how to use it can be as follows
 
 ### Notifications
 
+Notifications can be sent via multiple channels
+
+- email
+- Slack
+- Microsoft Teams
+
+#### Email
+
 Approval tasks can be configured with email notification support that will send emails to approvers upon task creation.
 To make use of it, email server must be configured as part of the deployment and approvers must be given as email addresses.
 
@@ -169,6 +177,80 @@ To make use of it, email server must be configured as part of the deployment and
             - "john@email.com"
             - "mary@email.com"            
 ````
+
+#### Slack
+
+Notifications can also be sent to Slack channel. Slack channel is set as parameter as presented below. 
+- parameter name: *notifyOnSlack` 
+- parameter value: *the channel name to be used*
+
+NOTE: channel name here is not the actual Slack channel name but a reference to what it is configured to via environment variable. 
+
+````
+  tasks:
+    - name: approval
+      taskRef:
+        apiVersion: tekton.automatiko.io/v1beta1
+        kind: ApprovalTask
+        name: approvaltask
+      params:
+        - name: pipeline
+          value: "$(context.pipelineRun.name)"
+        - name: description
+          value: "Sample approval from pipeline $(context.pipeline.name)"
+        - name: approvers
+          value:
+            - "john@email.com"
+            - "mary@email.com"  
+        - name: notifyOnSlack
+          value: "mychannel"          
+````
+
+This is based on Slack Incoming webhooks and as such needs to be enabled for given channel. There will be dedicated webhook link that should be configured on the deployment of the approval tasks
+
+````
+- name: QUARKUS_AUTOMATIKO_NOTIFICATIONS_SLACK_MYCHANNEL
+  value: "https://hooks.slack.com/s......"
+````
+
+TIP: There can be multiple channels defined, any channel defined in the pipeline must have a configuration. It is recommended to put these values in a secret since the webhook URLs contain secret information.
+
+#### Microsoft Teams
+
+Notifications can also be sent to Teams channel. Teams channel is set as parameter as presented below. 
+- parameter name: *notifyOnTeams` 
+- parameter value: *the channel name to be used*
+
+NOTE: channel name here is not the actual Teams channel name but a reference to what it is configured to via environment variable. 
+
+````
+  tasks:
+    - name: approval
+      taskRef:
+        apiVersion: tekton.automatiko.io/v1beta1
+        kind: ApprovalTask
+        name: approvaltask
+      params:
+        - name: pipeline
+          value: "$(context.pipelineRun.name)"
+        - name: description
+          value: "Sample approval from pipeline $(context.pipeline.name)"
+        - name: approvers
+          value:
+            - "john@email.com"
+            - "mary@email.com"  
+        - name: notifyOnTeams
+          value: "mychannel"          
+````
+
+This is based on Teams Incoming webhooks and as such needs to be enabled for given channel. There will be dedicated webhook link that should be configured on the deployment of the approval tasks
+
+````
+- name: QUARKUS_AUTOMATIKO_NOTIFICATIONS_TEAMS_MYCHANNEL
+  value: "https://trisotech.webhook.office.com/webhookb2......"
+````
+
+TIP: There can be multiple channels defined, any channel defined in the pipeline must have a configuration. It is recommended to put these values in a secret since the webhook URLs contain secret information.
 
 ### Tekton Dashboard integration
 
@@ -227,7 +309,7 @@ Following command will install Tekton and Tekton Dashboard into your Kubernetes 
 ````
 kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
 
-kubectl apply --filename https://github.com/tektoncd/dashboard/releases/latest/download/tekton-dashboard-release.yaml
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/dashboard/latest/release.yaml
 ````
 
 ### Configure Tekton

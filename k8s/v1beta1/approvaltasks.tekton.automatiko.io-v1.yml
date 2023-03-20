@@ -35,6 +35,10 @@ spec:
                 type: string
               description:
                 type: string
+              notifyOnTeams:
+                type: string
+              notifyOnSlack:
+                type: string
             type: object
           status:
             properties:

@@ -241,4 +241,18 @@ public class ApprovalFunctions implements Functions {
 
         return "Approval required for pipeline " + resource.getSpec().getPipeline();
     }
+
+    public static String teamsChannel(ApprovalTask resource) {
+        if (resource.getSpec().getNotifyOnTeams() != null) {
+            return resource.getSpec().getNotifyOnTeams();
+        }
+        return null;
+    }
+
+    public static String slackChannel(ApprovalTask resource) {
+        if (resource.getSpec().getNotifyOnSlack() != null) {
+            return resource.getSpec().getNotifyOnSlack();
+        }
+        return null;
+    }
 }

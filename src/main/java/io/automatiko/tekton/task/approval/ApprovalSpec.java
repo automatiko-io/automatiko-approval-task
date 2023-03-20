@@ -24,6 +24,10 @@ public class ApprovalSpec implements KubernetesResource {
     private String pipeline;
     private Strategy strategy;
 
+    private String notifyOnSlack;
+
+    private String notifyOnTeams;
+
     public String getDescription() {
         return description;
     }
@@ -62,6 +66,22 @@ public class ApprovalSpec implements KubernetesResource {
 
     public void setStrategy(Strategy strategy) {
         this.strategy = strategy;
+    }
+
+    public String getNotifyOnSlack() {
+        return notifyOnSlack;
+    }
+
+    public void setNotifyOnSlack(String slack) {
+        this.notifyOnSlack = slack;
+    }
+
+    public String getNotifyOnTeams() {
+        return notifyOnTeams;
+    }
+
+    public void setNotifyOnTeams(String teams) {
+        this.notifyOnTeams = teams;
     }
 
     @Override

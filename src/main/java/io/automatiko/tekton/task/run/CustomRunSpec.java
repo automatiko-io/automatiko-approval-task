@@ -61,7 +61,8 @@ public class CustomRunSpec implements KubernetesResource {
             return defaultValue;
         }
 
-        return params.stream().filter(param -> param.getOrDefault("name", "").equals(name)).map(param -> param.get("value"))
+        return params.stream().filter(param -> param.getOrDefault("name", "").toString().trim().equalsIgnoreCase(name))
+                .map(param -> param.get("value"))
                 .findFirst()
                 .orElse(defaultValue);
     }

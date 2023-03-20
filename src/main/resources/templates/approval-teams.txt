@@ -1,0 +1,25 @@
+\{
+  "@type": "MessageCard",
+  "@context": "http://schema.org/extensions",
+  "themeColor": "0076D7",
+  "summary": "Approval Task",
+  "sections": [
+    \{
+      "activityTitle": "Approval Task",
+      "activitySubtitle": "{inputs.spec.description.raw}",
+      "markdown": true
+    \}
+  ],
+  "potentialAction": [    
+    \{
+      "@type": "OpenUri",
+      "name": "Approve or reject pipeline run",
+      "targets": [
+        \{
+          "os": "default",
+          "uri": "{link}"
+        \}
+      ]
+    \}
+  ]
+\}

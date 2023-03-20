@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- origin at X=0.0 Y=0.0 -->
-<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:automatiko="https://automatiko.io" xmlns="https://automatiko.io" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://www.java.com/javaTypes" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd https://automatiko.io automatiko.xsd" id="Definition" exporter="org.eclipse.bpmn2.modeler.core" exporterVersion="2.0.0" expressionLanguage="http://www.mvel.org/2.0" targetNamespace="https://automatiko.io" typeLanguage="http://www.java.com/javaTypes">
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:automatiko="https://automatiko.io" xmlns="https://automatiko.io" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:java="http://www.java.com/javaTypes" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd https://automatiko.io automatiko.xsd" id="Definition" exporter="org.eclipse.bpmn2.modeler.core" exporterVersion="2.2.0" expressionLanguage="http://www.mvel.org/2.0" targetNamespace="https://automatiko.io" typeLanguage="http://www.java.com/javaTypes">
   <bpmn2:itemDefinition id="ItemDefinition_111" isCollection="false" structureRef="io.automatiko.tekton.task.approval.ApprovalTask"/>
   <bpmn2:itemDefinition id="ItemDefinition_152" isCollection="false" structureRef="java.lang.Boolean"/>
   <bpmn2:itemDefinition id="ItemDefinition_403" isCollection="false" structureRef="java.lang.String"/>
@@ -10,6 +10,7 @@
   <bpmn2:itemDefinition id="ItemDefinition_567" isCollection="false" structureRef="io.automatiko.tekton.task.approval.ApprovalResults"/>
   <bpmn2:itemDefinition id="ItemDefinition_4" isCollection="false" structureRef="java.lang.Integer"/>
   <bpmn2:itemDefinition id="ItemDefinition_167" isCollection="false" structureRef="io.automatiko.tekton.task.approval.internal.ApprovalTaskResourceOperations"/>
+  <bpmn2:itemDefinition id="ItemDefinition_1" isCollection="false" structureRef="Object"/>
   <bpmn2:interface id="Interface_1" implementationRef="io.automatiko.tekton.task.approval.internal.ApprovalTaskResourceOperations" name="ApprovalTaskResourceOperations">
     <bpmn2:operation id="Operation_1" name="updateApprovalTaskResponses"/>
   </bpmn2:interface>
@@ -90,6 +91,12 @@
         <bpmn2:extensionElements>
           <automatiko:metaData name="elementname">
             <automatiko:metaValue><![CDATA[Multi Approval]]></automatiko:metaValue>
+          </automatiko:metaData>
+          <automatiko:metaData name="slack-channel">
+            <automatiko:metaValue><![CDATA[#{slackChannel(resource)}]]></automatiko:metaValue>
+          </automatiko:metaData>
+          <automatiko:metaData name="teams-channel">
+            <automatiko:metaValue><![CDATA[#{teamsChannel(resource)}]]></automatiko:metaValue>
           </automatiko:metaData>
         </bpmn2:extensionElements>
         <bpmn2:incoming>SequenceFlow_3</bpmn2:incoming>

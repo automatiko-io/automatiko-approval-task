@@ -1,0 +1,18 @@
+\{
+	"blocks": [
+		\{
+			"type": "section",
+			"text": \{
+				"type": "mrkdwn",
+				"text": "{inputs.spec.description.raw}"
+			\}
+		\},
+		\{
+			"type": "section",
+			"text": \{
+				"type": "mrkdwn",
+				"text": "To approve or reject <{link}|view task details>"
+			\}
+		\}
+	]
+\}

@@ -17,7 +17,7 @@
 - [x] add support for cancellation
 - [x] add additional strategies
 - [ ] add mongo db based persistence
-- [ ] additional notification channels (teams, slack, etc)
+- [x] additional notification channels (teams, slack, etc)
 - [x] websocket based endpoint to display new tasks/clean completed tasks automatically
 
 ## Testability
