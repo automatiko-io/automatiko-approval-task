@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.automatiko.tekton</groupId>
   <artifactId>automatiko-approval-task</artifactId>
-  <version>0.7.0</version>
+  <version>0.7.1</version>
 
   <name>Automatiko Tekton Approval Task</name>
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
