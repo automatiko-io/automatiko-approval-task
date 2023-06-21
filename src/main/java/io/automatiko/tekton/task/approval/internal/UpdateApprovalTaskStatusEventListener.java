@@ -1,13 +1,12 @@
 package io.automatiko.tekton.task.approval.internal;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.microprofile.config.ConfigProvider;
 
 import io.automatiko.engine.api.event.process.DefaultProcessEventListener;
 import io.automatiko.engine.api.event.process.ProcessNodeTriggeredEvent;
 import io.automatiko.engine.workflow.process.instance.node.HumanTaskNodeInstance;
 import io.automatiko.tekton.task.approval.ApprovalTask;
+import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class UpdateApprovalTaskStatusEventListener extends DefaultProcessEventListener {

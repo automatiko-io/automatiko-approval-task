@@ -5,14 +5,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.automatiko.tekton</groupId>
   <artifactId>automatiko-approval-task</artifactId>
-  <version>0.7.1</version>
+  <version>0.8.0</version>
 
   <name>Automatiko Tekton Approval Task</name>
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
 
   <properties>
-    <quarkus.version>2.16.2.Final</quarkus.version>
-    <automatiko.version>0.23.0</automatiko.version>
+    <quarkus.version>3.1.0.Final</quarkus.version>
+    <automatiko.version>0.30.1</automatiko.version>
     <surefire.version>2.22.1</surefire.version>
     <compiler.version>3.8.1</compiler.version>
 
@@ -79,15 +79,6 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcpkix-jdk15on</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk15on</artifactId>
     </dependency>
 
     <!--  validation - optional -->

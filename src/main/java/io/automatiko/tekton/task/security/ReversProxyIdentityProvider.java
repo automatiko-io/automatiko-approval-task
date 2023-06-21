@@ -2,8 +2,6 @@ package io.automatiko.tekton.task.security;
 
 import java.security.Principal;
 
-import javax.inject.Singleton;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +10,7 @@ import io.quarkus.security.identity.IdentityProvider;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.security.runtime.QuarkusSecurityIdentity;
 import io.smallrye.mutiny.Uni;
+import jakarta.inject.Singleton;
 
 @Singleton
 public class ReversProxyIdentityProvider implements IdentityProvider<ReverseProxyAuthenticationRequest> {
