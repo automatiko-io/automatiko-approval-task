@@ -48,6 +48,10 @@ spec:
                     type: string
                   comment:
                     type: string
+                  approvedBy:
+                    type: string
+                  rejectedBy:
+                    type: string
                 type: object
               status:
                 type: string

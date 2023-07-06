@@ -6,6 +6,10 @@ public class ApprovalResults {
 
     private String comment;
 
+    private String approvedBy;
+
+    private String rejectedBy;
+
     public ApprovalResults() {
 
     }
@@ -18,6 +22,20 @@ public class ApprovalResults {
     public ApprovalResults(boolean decision, String comment) {
         this.decision = Boolean.toString(decision);
         this.comment = comment;
+    }
+
+    public ApprovalResults(String decision, String comment, String approvedBy, String rejectedBy) {
+        this.decision = decision;
+        this.comment = comment;
+        this.approvedBy = approvedBy;
+        this.rejectedBy = rejectedBy;
+    }
+
+    public ApprovalResults(boolean decision, String comment, String approvedBy, String rejectedBy) {
+        this.decision = Boolean.toString(decision);
+        this.comment = comment;
+        this.approvedBy = approvedBy;
+        this.rejectedBy = rejectedBy;
     }
 
     public String getDecision() {
@@ -36,9 +54,26 @@ public class ApprovalResults {
         this.comment = comment;
     }
 
+    public String getApprovedBy() {
+        return approvedBy;
+    }
+
+    public void setApprovedBy(String approvedBy) {
+        this.approvedBy = approvedBy;
+    }
+
+    public String getRejectedBy() {
+        return rejectedBy;
+    }
+
+    public void setRejectedBy(String rejectedBy) {
+        this.rejectedBy = rejectedBy;
+    }
+
     @Override
     public String toString() {
-        return "ApprovalResults [decision=" + decision + ", comment=" + comment + "]";
+        return "ApprovalResults [decision=" + decision + ", comment=" + comment + ", approvedBy=" + approvedBy + ", rejectedBy="
+                + rejectedBy + "]";
     }
 
 }

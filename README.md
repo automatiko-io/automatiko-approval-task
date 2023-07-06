@@ -127,6 +127,8 @@ Upon completion, approval task will set following results that can be used by fu
 
 - **decision** either `true` or `false` that corresponds to approved and rejected 
 - **comment** optional comment given by approvers, in case of multi strategy used, each comment will be separated by `|` symbol
+- **approvedBy** user who approved the task, in case of multi strategy used, each user will be separated by `|` symbol
+- **rejectedBy** user who rejected the task, in case of multi strategy used, each user will be separated by `|` symbol
 
 An example how to use it can be as follows
 

@@ -204,8 +204,16 @@ public class ApprovalFunctions implements Functions {
         String comment = results.stream().map(result -> result.getComment()).filter(c -> c != null)
                 .collect(Collectors.joining("|"));
 
+        String approvedBy = results.stream().map(result -> result.getApprovedBy()).filter(c -> c != null && !c.isEmpty())
+                .collect(Collectors.joining("|"));
+
+        String rejectedBy = results.stream().map(result -> result.getRejectedBy()).filter(c -> c != null && !c.isEmpty())
+                .collect(Collectors.joining("|"));
+
         context.setVariable("comment", comment);
         context.setVariable("approved", decision);
+        context.setVariable("approvedBy", approvedBy);
+        context.setVariable("rejectedBy", rejectedBy);
     }
 
     public static String kubeDurationToIso(CustomRun run) {

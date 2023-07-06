@@ -221,7 +221,8 @@ public class ApprovalTaskResourceOperations {
         return true;
     }
 
-    public void updateApprovalTaskStatusCompleted(ApprovalTask resource, boolean approved, String comment) {
+    public void updateApprovalTaskStatusCompleted(ApprovalTask resource, boolean approved, String comment, String approvedBy,
+            String rejectedBy) {
         ApprovalStatus status = resource.getStatus() == null ? new ApprovalStatus() : resource.getStatus();
 
         status.setStatus("completed");
@@ -231,6 +232,8 @@ public class ApprovalTaskResourceOperations {
         ApprovalResults results = new ApprovalResults();
         results.setDecision(Boolean.toString(approved));
         results.setComment(comment);
+        results.setApprovedBy(approvedBy);
+        results.setRejectedBy(rejectedBy);
         status.setResults(results);
 
         resource.setStatus(status);
@@ -275,6 +278,16 @@ public class ApprovalTaskResourceOperations {
             comment.put("name", "comment");
             comment.put("value", resource.getStatus().getResults().getComment());
             results.add(comment);
+
+            Map<String, Object> approvedBy = new HashMap<>();
+            approvedBy.put("name", "approvedBy");
+            approvedBy.put("value", resource.getStatus().getResults().getApprovedBy());
+            results.add(approvedBy);
+
+            Map<String, Object> rejectedBy = new HashMap<>();
+            rejectedBy.put("name", "rejectedBy");
+            rejectedBy.put("value", resource.getStatus().getResults().getRejectedBy());
+            results.add(rejectedBy);
 
             status.setResults(results);
 
