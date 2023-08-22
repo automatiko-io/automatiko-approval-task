@@ -232,7 +232,7 @@
       </build>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
-        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime, -H:-UseContainerSupport</quarkus.native.additional-build-args>
+        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime,--initialize-at-run-time=com.googlecode.cqengine.persistence.support.serialization.KryoSerializer, -H:-UseContainerSupport</quarkus.native.additional-build-args>
         <quarkus.native.container-build>true</quarkus.native.container-build>
         <quarkus.container-image.build>true</quarkus.container-image.build>
         <quarkus.container-image.insecure>true</quarkus.container-image.insecure>
