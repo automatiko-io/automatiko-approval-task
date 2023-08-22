@@ -287,12 +287,44 @@ This will provide a list of tasks available with links to the form to provide de
 
 ### Approval dashboard
 
-Version 0.3.0 introduced a dashboard like endpoint that allows users to receive real time updates on thier approval tasks. A sample page that allows to specify user and group can be found at `/tasks.html` path of your approval
+Version 0.3.0 introduced a dashboard like endpoint that allows users to receive real time updates on their approval tasks. A sample page that allows to specify user and group can be found at `/tasks.html` path of your approval
 task site. Once user connects to the approval tasks the tasks will automatically show up on the board. 
 
 <img src="img/13.png" width="800px"/>
 
 In addition, tasks that were completed automatically disappear from the board as well.
+
+_Since version 0.3.0_
+
+### My approval tasks
+
+My approval tasks page allows to find tasks for logged in user. It gives similar feature as `Approval dashboard` but it is not real time (requires to refresh the page to load latest tasks) and allows to get tasks that are already taken care of. 
+
+<img src="img/14.png" width="800px"/>
+
+That in turn allows to find what was the status of a given task and what was the approval decision.
+
+<img src="img/15.png" width="800px"/>
+
+On tasks that are already completed, tooltip is included on the row, so moving mouse over it will show the comment from the approver.
+
+NOTE: This page still uses user and groups to find eligible tasks. In case no authentication is configured user and groups can be provided via url query parameters e.g. `?user=john@email.com&group=admin&group=developers`
+
+#### Installation over existing tasks
+
+When installing version that has `My approval tasks` feature, the page will always come back empty. This is due tot he fact that approval tasks where created before the feature existed. To bring tasks on the page, execute reindex command with following curl command
+
+````
+curl -X POST http://host:port/management/index/tasks
+````
+
+replace `host` and `port` with proper values for your environment. Successful execution of the command should return status similar to following:
+
+````
+{"single":2,"fourEyes":0,"approvals":2,"message":"User tasks reindexed","runs":0,"multiGroup":0,"multi":0}
+````
+
+_Since version 0.10.0_
 
 ### Management view (for admins only)
 
@@ -494,6 +526,8 @@ and set additional environment variables to instruct it where data should be sto
   value: /data/processes
 - name: QUARKUS_AUTOMATIKO_JOBS_FILESYSTEM_PATH
   value: /data/jobs  
+- name: QUARKUS_AUTOMATIKO_INDEX_USERTASKS_FS_PATH
+  value: /data/usertasks    
 ````
 
 This will configure all the persistent data to be stored in external storage.

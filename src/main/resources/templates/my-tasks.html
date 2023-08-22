@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>My approval tasks</title>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	<script type = "text/javascript">
+		var page = 1;
+		var pageSize = 20;
+		
+		function loadTasks(onlyWaiting) { 
+			$("#contentT").empty();
+			$.ajax({
+				url : "/index/usertasks?sortBy=state&sortAsc=false&user={user}&group={groups}&page=" + page + "&size=" + pageSize + (onlyWaiting ? "&state=Ready" : ""),
+				type : 'GET',
+				dataType : 'json',
+				contentType: 'application/json',			
+				crossDomain : true,
+				success : function(data) {						
+					data.forEach((element) => appendTaskDataRow(element));
+				},
+				error : function(req, status, error) {
+					console.error("Task query failed with " + status + ", error: " + error);
+				}
+			});
+		}
+         
+         function appendTaskDataRow(val) {  
+        	 if (val.state === 'Completed') {
+        		 var html = "<tr title=\"" + val.outputs.comment + "\">" +	        	 
+	        	 "<td>" + val.inputs.spec.description + "</td>" +	        	 
+	        	 "<td>Completed</td>" +
+	        	 "<td>" + (val.outputs.approval ? "<span class=\"fa fa-check\"></span>" : "<span class=\"fa fa-ban\"></span>") + "</td>" +	
+	        	 "<td>" + val.outputs.ActorId + "</td>" +	
+	        	 "<td>" + val.completeDate + "</td>" +	
+	        	 "</tr>";
+	             $(html).appendTo("#contentT");
+        	 } else if (val.state === 'Aborted') {
+        		 var html = "<tr>" +	        	 
+	        	 "<td>" + val.inputs.spec.description + "</td>" +	        	 
+	        	 "<td>Canceled</td>" +
+	        	 "<td></td>" +	
+	        	 "<td></td>" +	
+	        	 "<td></td>" +	
+	        	 "</tr>";
+	             $(html).appendTo("#contentT");
+        	 } else {
+	        	 var html = "<tr>" +	        	 
+	        	 "<td><a href=\"" + val.formLink + "?user={user}&group={groups}\" class=\"link-underline-primary\" target=\"_blank\">" + val.inputs.spec.description+ "</a></td>" +	        	 
+	        	 "<td>Waiting for approval</td>" +
+	        	 "<td></td>" +	
+	        	 "<td></td>" +	
+	        	 "<td></td>" +	
+	        	 "</tr>";
+	             $(html).appendTo("#contentT");
+        	 }
+         }
+
+         
+         $(document).ready(function() {
+
+		    $('#waitingTasks').click(function() {
+		        loadTasks(this.checked);       
+		    });
+		    $('#nextPage').click(function() {
+				page++;
+		        loadTasks($('#waitingTasks').is(':checked')); 
+		        if (page > 1) {
+					$('#prevPageControl').removeClass("disabled");
+				}      
+		    });
+		    $('#prevPage').click(function() {
+				if (page > 1) {
+			        page--;
+			        loadTasks($('#waitingTasks').is(':checked'));
+		        } 
+		        if (page == 1) {					
+					$('#prevPageControl').addClass("disabled");				
+				}       
+		    });
+		    
+		    loadTasks($('#waitingTasks').is(':checked'));
+		});
+      </script>
+		
+   </head>
+   
+   <body>
+		
+      <div class="container" role="main">
+        <h3>Approval tasks for {user}</h3>
+        <hr/>
+        <div class="flex-column d-flex align-items-end ">
+	        <div class="form-check form-switch justify-content-end">
+			  <input class="form-check-input" type="checkbox" role="switch" id="waitingTasks" checked>
+			  <label class="form-check-label" for="waitingTasks">Only tasks waiting for approval</label>
+			</div>
+        </div>
+        <hr/>
+      	<table class="table">
+            <thead>
+            <tr>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Approved</th>
+                <th>Approver</th>
+                <th>Approved At</th>
+            </tr>
+            </thead>
+            <tbody id="contentT">
+            <!-- filled using Ajax -->
+            </tbody>
+        </table>            
+      </div>
+      
+      <nav aria-label="Pagination">
+		  <ul class="pagination justify-content-center">
+		    <li id="prevPageControl" class="page-item disabled">
+		      <a class="page-link" id="prevPage">Previous</a>
+		    </li>
+		    <li class="page-item">
+		      <a class="page-link" href="#" id="nextPage">Next</a>
+		    </li>
+		  </ul>
+		</nav>
+   </body>
+
+</body>
+</html>

@@ -183,11 +183,15 @@ spec:
             - name: QUARKUS_OPERATOR_SDK_NAMESPACES
               value: default
             - name: QUARKUS_AUTOMATIKO_SERVICE_URL
-              value: http://localhost:9000     
+              value: http://localhost:9000
+            - name: QUARKUS_AUTOMATIKO_ON_INSTANCE_END
+              value: "keep"
             - name: QUARKUS_AUTOMATIKO_PERSISTENCE_FILESYSTEM_PATH
               value: /data/processes
             - name: QUARKUS_AUTOMATIKO_JOBS_FILESYSTEM_PATH
-              value: /data/jobs                                 
+              value: /data/jobs
+            - name: QUARKUS_AUTOMATIKO_INDEX_USERTASKS_FS_PATH
+              value: /data/usertasks
           image: automatiko/automatiko-approval-task
           imagePullPolicy: Always
           livenessProbe:
