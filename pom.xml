@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.automatiko.tekton</groupId>
   <artifactId>automatiko-approval-task</artifactId>
-  <version>0.10.0</version>
+  <version>0.10.1</version>
 
   <name>Automatiko Tekton Approval Task</name>
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
@@ -232,7 +232,7 @@
       </build>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
-        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime,--initialize-at-run-time=com.googlecode.cqengine.persistence.support.serialization.KryoSerializer, -H:-UseContainerSupport</quarkus.native.additional-build-args>
+        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime,--initialize-at-run-time=com.googlecode.cqengine.persistence.support.serialization.KryoSerializer, -H:-UseContainerSupport, -march=compatibility</quarkus.native.additional-build-args>
         <quarkus.native.container-build>true</quarkus.native.container-build>
         <quarkus.container-image.build>true</quarkus.container-image.build>
         <quarkus.container-image.insecure>true</quarkus.container-image.insecure>
