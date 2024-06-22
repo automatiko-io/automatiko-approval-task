@@ -19,6 +19,8 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: 17
+        distribution: 'temurin'
+        cache: 'maven'
     - name: Docker login
       env:
         QUARKUS_CONTAINER_IMAGE_PASSWORD: ${{secrets.DOCKER_PASSWORD}}

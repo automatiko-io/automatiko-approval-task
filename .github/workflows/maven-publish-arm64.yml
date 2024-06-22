@@ -21,5 +21,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: 17
+        distribution: 'temurin'
+        cache: 'maven'
     - name: Build Automatiko Approval Tasks
       run: mvn -B package -Pcontainer-arm64 --file pom.xml

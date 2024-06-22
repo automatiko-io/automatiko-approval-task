@@ -27,6 +27,8 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: 17
+        distribution: 'temurin'
+        cache: 'maven'
     - name: Build Automatiko
       run: mvn -B install -DskipTests --file automatiko/pom.xml
     - name: Build Automatiko Approval Tasks
