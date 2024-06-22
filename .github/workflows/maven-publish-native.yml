@@ -17,17 +17,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      with:
-        path: automatiko-approval-tasks
-    - uses: actions/checkout@v4
-      with:
-        repository: automatiko-io/automatiko-engine
-        path: automatiko
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: 17
-    - name: Build Automatiko
-      run: mvn -B install -DskipTests --file automatiko/pom.xml
     - name: Build Automatiko Approval Tasks
-      run: mvn -B package --file automatiko-approval-tasks/pom.xml
+      run: mvn -B package -Pcontainer-native --file pom.xml
