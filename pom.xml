@@ -11,8 +11,8 @@
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
 
   <properties>
-    <quarkus.version>3.2.2.Final</quarkus.version>
-    <automatiko.version>0.31.0</automatiko.version>
+    <quarkus.version>3.10.1</quarkus.version>
+    <automatiko.version>0.34.0</automatiko.version>
     <surefire.version>2.22.1</surefire.version>
     <compiler.version>3.8.1</compiler.version>
 
@@ -60,16 +60,16 @@
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-user-tasks-email-addon</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-user-tasks-slack-addon</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-user-tasks-teams-addon</artifactId>
-    </dependency>    
+    </dependency>
 
     <dependency>
       <groupId>io.automatiko.addons</groupId>
@@ -80,7 +80,7 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>io.automatiko.addons</groupId>
       <artifactId>automatiko-user-tasks-index-fs-addon</artifactId>
@@ -195,6 +195,24 @@
       </properties>
     </profile>
     <profile>
+      <id>container-arm64</id>
+      <activation>
+        <property>
+          <name>container</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-container-image-jib</artifactId>
+        </dependency>
+      </dependencies>
+      <properties>
+        <quarkus.container-image.build>true</quarkus.container-image.build>
+        <quarkus.jib.base-jvm-image>arm64v8/eclipse-temurin:17-ubi9-minimal</quarkus.jib.base-jvm-image>
+      </properties>
+    </profile>    
+    <profile>
       <id>container-native</id>
       <activation>
         <property>
@@ -232,7 +250,7 @@
       </build>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
-        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime,--initialize-at-run-time=com.googlecode.cqengine.persistence.support.serialization.KryoSerializer, -H:-UseContainerSupport, -march=compatibility</quarkus.native.additional-build-args>
+        <quarkus.native.additional-build-args>--report-unsupported-elements-at-runtime,--allow-incomplete-classpath,--initialize-at-run-time=com.googlecode.cqengine.persistence.support.serialization.KryoSerializer, -H:-UseContainerSupport, -march=compatibility</quarkus.native.additional-build-args>
         <quarkus.native.container-build>true</quarkus.native.container-build>
         <quarkus.container-image.build>true</quarkus.container-image.build>
         <quarkus.container-image.insecure>true</quarkus.container-image.insecure>
