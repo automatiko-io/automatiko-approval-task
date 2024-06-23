@@ -36,5 +36,5 @@ jobs:
         logout: true  
     - name: Build Automatiko Approval Tasks
       if: inputs.push-to-registry
-      run: mvn -B package -Pcontainer-native -Dquarkus.container-image.push=true -Dquarkus.container-image.registry=ghcr.io -Dquarkus.container-image.group=automatiko --file pom.xml            
+      run: mvn -B package -Pcontainer-native -Dquarkus.container-image.push=true -Dquarkus.container-image.registry=ghcr.io -Dquarkus.container-image.group=automatiko-io --file pom.xml            
       
