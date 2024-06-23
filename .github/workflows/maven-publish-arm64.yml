@@ -5,12 +5,18 @@ name: Build arm64
 
 on:
   workflow_dispatch:
-
+    inputs:
+      push-to-registry:
+        description: 'Push container to GH registry'
+        default: false
+        type: boolean
 jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      packages: write
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -21,3 +27,16 @@ jobs:
         cache: 'maven'
     - name: Build Automatiko Approval Tasks
       run: mvn -B package -Pcontainer-arm64 --file pom.xml
+      
+      
+    - name: login ghcr.io
+      if: inputs.push-to-registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        logout: true  
+    - name: Build Automatiko Approval Tasks
+      if: inputs.push-to-registry
+      run: mvn -B package -Pcontainer-arm64 -Dquarkus.container-image.push=true -Dquarkus.container-image.registry=ghcr.io -Dquarkus.container-image.group=automatiko --file pom.xml            
