@@ -209,7 +209,7 @@
       </dependencies>
       <properties>
         <quarkus.container-image.build>true</quarkus.container-image.build>
-        <quarkus.jib.base-jvm-image>arm64v8/eclipse-temurin:17-ubi9-minimal</quarkus.jib.base-jvm-image>
+        <quarkus.jib.platforms>linux/arm64/v8</quarkus.jib.platforms>
         <quarkus.container-image.tag>${project.version}-arm64</quarkus.container-image.tag>
       </properties>
     </profile>    
