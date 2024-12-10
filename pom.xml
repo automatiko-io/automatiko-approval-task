@@ -31,11 +31,6 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <dependency>
-        <groupId>io.quarkiverse.operatorsdk</groupId>
-        <artifactId>quarkus-operator-sdk</artifactId>
-        <version>6.7.0</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
