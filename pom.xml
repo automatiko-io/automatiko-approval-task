@@ -11,8 +11,8 @@
   <description>Tekton Approval task for pipelines based on Automatiko workflows</description>
 
   <properties>
-    <quarkus.version>3.16.3</quarkus.version>
-    <automatiko.version>0.38.0</automatiko.version>
+    <quarkus.version>3.17.4</quarkus.version>
+    <automatiko.version>0.39.0</automatiko.version>
     <surefire.version>2.22.1</surefire.version>
     <compiler.version>3.8.1</compiler.version>
 
@@ -212,7 +212,7 @@
         <quarkus.jib.platforms>linux/arm64/v8</quarkus.jib.platforms>
         <quarkus.container-image.tag>${project.version}-arm64</quarkus.container-image.tag>
       </properties>
-    </profile>    
+    </profile>
     <profile>
       <id>container-native</id>
       <activation>
