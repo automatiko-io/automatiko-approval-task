@@ -48,7 +48,7 @@ jobs:
         QUARKUS_CONTAINER_IMAGE_USERNAME: automatiko
       run: docker login -u $QUARKUS_CONTAINER_IMAGE_USERNAME -p $QUARKUS_CONTAINER_IMAGE_PASSWORD
     - name: Build Automatiko Approval Tasks
-      run: mvn -B -Dquarkus.container-image.tag=${{ inputs.version }}-arm -Dquarkus.container-image.push=true -Dquarkus.container-image.group=automatiko  package -Pcontainer-native --file pom.xml
+      run: mvn -B -Dquarkus.jib.platforms=linux/arm64/v8 -Dquarkus.container-image.tag=${{ inputs.version }}-arm -Dquarkus.container-image.push=true -Dquarkus.container-image.group=automatiko  package -Pcontainer-native --file pom.xml
 
   build-multi-arch-native-image-container:
     runs-on: ubuntu-latest
@@ -62,5 +62,3 @@ jobs:
     - name: Build Automatiko Approval Tasks Multi Arch
       run: |
         docker buildx imagetools create --tag automatiko/automatiko-approval-task:latest --tag automatiko/automatiko-approval-task:${{ inputs.version }} automatiko/automatiko-approval-task:${{ inputs.version }}-arm automatiko/automatiko-approval-task:${{ inputs.version }}-arm
-        docker push automatiko/automatiko-approval-task:latest
-        docker push automatiko/automatiko-approval-task:${{ inputs.version }}
