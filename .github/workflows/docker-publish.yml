@@ -61,4 +61,4 @@ jobs:
       run: docker login -u $QUARKUS_CONTAINER_IMAGE_USERNAME -p $QUARKUS_CONTAINER_IMAGE_PASSWORD
     - name: Build Automatiko Approval Tasks Multi Arch
       run: |
-        docker buildx imagetools create --tag automatiko/automatiko-approval-task:latest --tag automatiko/automatiko-approval-task:${{ inputs.version }} automatiko/automatiko-approval-task:${{ inputs.version }}-arm automatiko/automatiko-approval-task:${{ inputs.version }}-arm
+        docker buildx imagetools create --tag automatiko/automatiko-approval-task:latest --tag automatiko/automatiko-approval-task:${{ inputs.version }} automatiko/automatiko-approval-task:${{ inputs.version }}-arm automatiko/automatiko-approval-task:${{ inputs.version }}-amd
