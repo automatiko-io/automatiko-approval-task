@@ -49,8 +49,9 @@ public class ReverseProxyHttpAuthenticationMechanism implements HttpAuthenticati
     }
 
     @Override
-    public HttpCredentialTransport getCredentialTransport() {
-        return new HttpCredentialTransport(HttpCredentialTransport.Type.OTHER_HEADER, X_FORWARDED_USER_HEADER);
+    public Uni<HttpCredentialTransport> getCredentialTransport(RoutingContext context) {
+        return Uni.createFrom()
+                .item(new HttpCredentialTransport(HttpCredentialTransport.Type.OTHER_HEADER, X_FORWARDED_USER_HEADER));
     }
 
 }
