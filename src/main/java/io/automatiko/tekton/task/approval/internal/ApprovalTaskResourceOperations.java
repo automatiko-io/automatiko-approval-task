@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.microprofile.faulttolerance.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,6 +134,7 @@ public class ApprovalTaskResourceOperations {
         return skipResourceUpdate;
     }
 
+    @Retry(maxRetries = 4, delay = 100)
     public void onTimeout(CustomRun runResource) {
 
         Resource<ApprovalTask> r = kube.resources(ApprovalTask.class).inNamespace(runResource.getMetadata().getNamespace())
@@ -221,6 +223,7 @@ public class ApprovalTaskResourceOperations {
         return true;
     }
 
+    @Retry(maxRetries = 4, delay = 100)
     public void updateApprovalTaskStatusCompleted(ApprovalTask resource, boolean approved, String comment, String approvedBy,
             String rejectedBy) {
         ApprovalStatus status = resource.getStatus() == null ? new ApprovalStatus() : resource.getStatus();
@@ -259,6 +262,7 @@ public class ApprovalTaskResourceOperations {
 
     }
 
+    @Retry(maxRetries = 4, delay = 100)
     public void updateRunResultsCompleted(ApprovalTask resource) {
 
         Resource<CustomRun> r = kube.resources(CustomRun.class).inNamespace(resource.getMetadata().getNamespace())
@@ -295,6 +299,7 @@ public class ApprovalTaskResourceOperations {
         }
     }
 
+    @Retry(maxRetries = 4, delay = 100)
     public void updateApprovalTaskResponses(ApprovalTask resource) {
         Resource<ApprovalTask> r = kube.resources(ApprovalTask.class).inNamespace(resource.getMetadata().getNamespace())
                 .withName(resource.getMetadata().getName());
@@ -325,6 +330,7 @@ public class ApprovalTaskResourceOperations {
         }
     }
 
+    @Retry(maxRetries = 4, delay = 100)
     public void updateRunStatusCreated(CustomRun resource) {
 
         CustomRunStatus status = resource.getStatus() == null ? new CustomRunStatus() : resource.getStatus();
@@ -349,6 +355,7 @@ public class ApprovalTaskResourceOperations {
         resource.setStatus(status);
     }
 
+    @Retry(maxRetries = 4, delay = 100)
     public void updateRunStatusFailed(CustomRun resource) {
 
         CustomRunStatus status = resource.getStatus() == null ? new CustomRunStatus() : resource.getStatus();
@@ -373,6 +380,7 @@ public class ApprovalTaskResourceOperations {
         resource.setStatus(status);
     }
 
+    @Retry(maxRetries = 4, delay = 100)
     public boolean updateRunStatusCompleted(CustomRun resource) {
 
         Resource<CustomRun> r = kube.resources(CustomRun.class).inNamespace(resource.getMetadata().getNamespace())
